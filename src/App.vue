@@ -2,7 +2,7 @@
   <div id="app">
     <div id="set-completed-sessions-container">
       <div id="set-completed-sessions-container-inner">
-        <input id="set-completed-sessions" type="number" min="0" max="30" @keyup.13="setCompletedSessions" v-model="inputIndex">
+        <input placeholder="Session" id="set-completed-sessions" type="number" min="0" max="30" @keyup.13="setCompletedSessions" v-model="inputIndex">
         <div id="set-completed-sessions-shadow"></div>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
 			return this.nextUp.sessionNum === sessionNum
 		},
         setCompletedSessions() {
-          if (this.inputIndex > 0 && this.inputIndex <= 30) {
+          if (this.inputIndex >= 0 && this.inputIndex <= 29) {
             let array = []
             for (let i = 0; i < this.inputIndex; i++) {
               array.push(i+1)
