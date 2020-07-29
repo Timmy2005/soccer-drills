@@ -10,10 +10,10 @@
       <ul>
   
         <item v-for="(link, index) in links" :link="link" :sessionNum="index+1" :key="index"
-              :visited="isVisited(index+1)" @visited-changed="updateVisitedArr" :is-next-up="isNextUp(index+1)"/>
+              :visited="isVisited(index+1)" @visited-changed="clickedUpdateVisitedArr" :is-next-up="isNextUp(index+1)"/>
       </ul>
     </div>
-    <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="updateVisitedArr"></next-up>
+    <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="clickedUpdateVisitedArr"></next-up>
     <div class="clear-next-up" @click="clearNextUp">Clear</div>
   </div>
 </template>
@@ -34,13 +34,10 @@ export default {
 			
 			const that = this
 			
-			console.log(that.visitedArr)
 			that.nextUpLinkIndex = null
 			if (that.visitedArr.length > 0) {
 				for (let i of that.visitedArr) {
 					if (runningIndex !== i) {
-						console.log(runningIndex)
-						console.log(i)
 						that.nextUpLinkIndex = runningIndex
 						break
 					}
@@ -68,8 +65,14 @@ export default {
 			localStorage.setItem('visitedLinks', JSON.stringify([]))
 			this.updateVisitedArr()
 		},
+        clickedUpdateVisitedArr() {
+          let timeout = window.setTimeout(() => {
+            this.updateVisitedArr()
+            window.clearTimeout(timeout)
+          }, 100)
+        },
 		updateVisitedArr() {
-			this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
+            this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
 		},
 		isNextUp(sessionNum) {
 			return this.nextUp.sessionNum === sessionNum
@@ -81,6 +84,9 @@ export default {
               array.push(i+1)
             }
             localStorage.setItem('visitedLinks', JSON.stringify(array))
+            this.updateVisitedArr()
+          } if (parseInt(this.inputIndex) === 30) {
+            localStorage.setItem('visitedLinks', JSON.stringify([]))
             this.updateVisitedArr()
           }
         }

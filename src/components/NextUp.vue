@@ -15,16 +15,21 @@ export default {
 	props: ['href', 'sessionNum'],
 	methods: {
 		addLink() {
-			const items = localStorage.getItem('visitedLinks')
-			if (items) {
-				let obj = JSON.parse(items)
-				obj.push(this.sessionNum)
-				localStorage.setItem('visitedLinks', JSON.stringify(obj))
-			} else {
-				localStorage.setItem('visitedLinks', JSON.stringify([this.sessionNum]))
-				console.log(localStorage)
+			if (this.sessionNum < 30) {
+				const items = localStorage.getItem('visitedLinks')
+				if (items) {
+					let obj = JSON.parse(items)
+					obj.push(this.sessionNum)
+					localStorage.setItem('visitedLinks', JSON.stringify(obj))
+				} else {
+					localStorage.setItem('visitedLinks', JSON.stringify([this.sessionNum]))
+					console.log(localStorage)
+				}
+				this.$emit('visited-changed')
+			} else if (parseInt(this.sessionNum) === 30) {
+				localStorage.setItem('visitedLinks', JSON.stringify([]))
+				this.$emit('visited-changed')
 			}
-			this.$emit('visited-changed')
 		},
 	},
 }
