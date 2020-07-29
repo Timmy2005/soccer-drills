@@ -1,5 +1,10 @@
 <template>
-  <li ref="el" class="item"><a @click="addLink" :href="link" target="_blank">Session {{ sessionNum }}</a></li>
+  <li ref="el" class="item">
+    <a @click="addLink" :href="link" target="_blank" :class="{ 'next-up-item': isNextUp }">
+      <div class="next-up-indicator" :class="{ 'next-up-indicator-active': isNextUp }"></div>
+      Session {{ sessionNum }}
+    </a>
+  </li>
 </template>
 
 <script>
@@ -9,7 +14,8 @@ export default {
 		link: String,
 		sessionNum: Number,
         visited: Boolean,
-	},
+        isNextUp: Boolean
+    },
 	methods: {
 		addLink() {
             const items = localStorage.getItem('visitedLinks')
@@ -39,34 +45,43 @@ export default {
 
   li {
   display: flex;
-  margin: 0 10px;
   }
 
   a {
   color: #42a7b9;
   text-decoration: none;
   }
-
-  /*a:visited {*/
-	/*  color: #295d7a;*/
-  /*}*/
-
-  .next-up {
-  position: absolute;
-  top: 200px;
-  right: 50%;
-  left: 50%;
-  display: none;
+  
+  a {
+    cursor: pointer;
+    display: flex;
+    padding: 10px 0;
+    transition: 150ms all ease;
+  
   }
   
-  .item {
-    transition: all 250ms ease;
-    will-change: margin-left, transform;
-  }
-  
-  .item:hover {
-    margin-left: 20px;
-    transform: scale(1.2);
+  a:hover {
+    color: var(--color-dark);
   }
 
+  .next-up-item {
+    color: #2f6b8c;
+    font-weight: 600;
+  }
+  
+  .next-up-indicator {
+    max-width: 0;
+    width: 5px;
+    background: var(--color-dark);
+    margin-right: 0;
+    will-change: max-width, margin-right;
+    transition: max-width 250ms, margin-right 150ms 100ms ease-out;
+  }
+  
+  .next-up-indicator-active {
+    max-width: 5px;
+    margin-right: 10px;
+    transition: max-width 250ms, margin-right 150ms;
+  
+  }
 </style>

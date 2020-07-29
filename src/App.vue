@@ -1,9 +1,18 @@
 <template>
   <div id="app">
-    <ul>
-      <item v-for="(link, index) in links" :link="link" :sessionNum="index+1" :key="index"
-			:visited="isVisited(index+1)" @visited-changed="updateVisitedArr"/>
-    </ul>
+    <div id="set-completed-sessions-container">
+      <div id="set-completed-sessions-container-inner">
+        <input id="set-completed-sessions" type="number" min="0" max="30" @keyup.13="setCompletedSessions" v-model="inputIndex">
+        <div id="set-completed-sessions-shadow"></div>
+      </div>
+    </div>
+    <div id="list-container">
+      <ul>
+  
+        <item v-for="(link, index) in links" :link="link" :sessionNum="index+1" :key="index"
+              :visited="isVisited(index+1)" @visited-changed="updateVisitedArr" :is-next-up="isNextUp(index+1)"/>
+      </ul>
+    </div>
     <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="updateVisitedArr"></next-up>
     <div class="clear-next-up" @click="clearNextUp">Clear</div>
   </div>
@@ -11,7 +20,7 @@
 
 <script>
 import Item from './components/Item.vue'
-import NextUp from '@/components/NextUp.vue'
+import NextUp from './components/NextUp.vue'
 
 export default {
 	name: 'App',
@@ -47,7 +56,7 @@ export default {
 				sessionNum: that.nextUpLinkIndex,
 				href: this.links[this.nextUpLinkIndex - 1]
 			}
-		}
+		},
 	},
 	methods: {
 		isVisited(sessionNum) {
@@ -60,9 +69,21 @@ export default {
 			this.updateVisitedArr()
 		},
 		updateVisitedArr() {
-			console.log('ran')
 			this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
-		}
+		},
+		isNextUp(sessionNum) {
+			return this.nextUp.sessionNum === sessionNum
+		},
+        setCompletedSessions() {
+          if (this.inputIndex > 0 && this.inputIndex <= 30) {
+            let array = []
+            for (let i = 0; i < this.inputIndex; i++) {
+              array.push(i+1)
+            }
+            localStorage.setItem('visitedLinks', JSON.stringify(array))
+            this.updateVisitedArr()
+          }
+        }
 	},
 	mounted() {
 		this.updateVisitedArr()
@@ -102,7 +123,8 @@ export default {
 				'https://www.facebook.com/318748909507/videos/171019884353180/'
 			],
 			nextUpLinkIndex: null,
-			visitedArr: []
+			visitedArr: [],
+			inputIndex: null
 		}
 	},
 	
@@ -110,30 +132,134 @@ export default {
 </script>
 
 <style>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
-	margin-top: 40px;
-	display: flex;
+    #app {
+		font-family: Avenir, Helvetica, Arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-align: center;
+		color: #2c3e50;
+		display: flex;
+      height: 100%;
 	
-}
+	}
 
-a:visited + a {
-	display: flex;
-}
+	a:visited + a {
+		display: flex;
+	}
 
-ul {
-	width: 120px;
-}
+	ul {
+      padding: 20px 50px;
+      overflow: scroll;
+      margin: 0;
+      border-right: #e0e0e0 1px solid;
+      width: 200px;
+      position: relative;
+      height: 100%;
+      box-sizing: border-box;
+	}
 
-.clear-next-up {
-	position: absolute;
-	right: 20px;
-	top: 10px;
-	font-size: 15px;
-	cursor: pointer;
-}
+    #list-container::before, #list-container::after {
+      position: absolute;
+      content: '';
+      height: 20px;
+      left: 0;
+      right: 0;
+      z-index: 5;
+    }
+    
+    #list-container::before {
+      top: 0;
+      background-image: linear-gradient(white, transparent);
+    }
+
+    #list-container::after {
+      bottom: 0;
+      background-image: linear-gradient(transparent, white);
+    }
+    
+    #list-container {
+      max-height: 100%;
+      position: relative;
+      width: auto;
+      
+    }
+
+    ul::-webkit-scrollbar {
+      display: none;
+    }
+
+    ul {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+	.clear-next-up {
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		font-size: 15px;
+		cursor: pointer;
+	}
+
+	#set-completed-sessions {
+		--color: #2f6b8c;
+		outline: none;
+		border: none;
+		font-family: Avenir, Helvetica, Arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		color: var(--color-light);
+		width: 50px;
+	}
+
+	#set-completed-sessions-container {
+		position: absolute;
+		top: 15px;
+		right: 75px;
+	
+	}
+
+	#set-completed-sessions-container-inner {
+		padding: 4px 14px;
+		margin-bottom: 10px;
+		border-radius: 30px;
+		border: var(--color-dark) 1px solid;
+		position: relative;
+	}
+
+	#set-completed-sessions-shadow {
+		width: 100%;
+		height: 100%;
+		box-shadow: 0 0 5px 0 var(--color-light);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 30px;
+		z-index: -1;
+		opacity: 0;
+		transition: opacity 150ms ease;
+	}
+
+	#set-completed-sessions:focus ~ #set-completed-sessions-shadow {
+		opacity: 1;
+	}
+
+	:root {
+		--color-light: #42a7b9;
+		--color-dark: #2f6b8c;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type=number] {
+		-moz-appearance: textfield;
+	}
+ 
+ 
 </style>

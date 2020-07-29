@@ -47,7 +47,12 @@ export default {
 	#next-up {
 		text-decoration: none;
 		font-size: 20px;
-		color: #42a7b9;
+		transition: 250ms all ease;
+		color: var(--color-light);
 		
+	}
+	
+	#next-up:hover {
+		color: var(--color-dark);
 	}
 </style>
