@@ -2,7 +2,8 @@
   <div id="app">
     <div id="set-completed-sessions-container">
       <div id="set-completed-sessions-container-inner">
-        <input placeholder="Session" id="set-completed-sessions" type="number" min="0" max="30" @keyup.13="setCompletedSessions" v-model="inputIndex">
+        <input placeholder="Session" id="set-completed-sessions" type="number" min="0" max="30"
+                @keyup.13="setCompletedSessions" v-model="inputIndex">
         <div id="set-completed-sessions-shadow"></div>
       </div>
     </div>
@@ -13,7 +14,10 @@
               :visited="isVisited(index+1)" @visited-changed="clickedUpdateVisitedArr" :is-next-up="isNextUp(index+1)"/>
       </ul>
     </div>
-    <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="clickedUpdateVisitedArr"></next-up>
+    <div id="content">
+      <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="clickedUpdateVisitedArr"></next-up>
+      <div id="lastSession">{{ lastSession }}</div>
+    </div>
     <div class="clear-next-up" @click="clearNextUp">Clear</div>
   </div>
 </template>
@@ -54,6 +58,18 @@ export default {
 				href: this.links[this.nextUpLinkIndex - 1]
 			}
 		},
+		lastSession() {
+			console.log(this.lastSessionDate)
+			if (this.lastSessionDate) {
+				// let dayStr = this.weekdays[this.lastSessionDate.getDay()]
+				// let dayOfMonth = this.lastSessionDate.getDate()
+				// let monthStr = this.months[this.lastSessionDate.getMonth()]
+                let daysSince = this.getDaysSince(this.lastSessionDate)
+				return this.daysAgoToString(daysSince)
+			} else {
+				return 'You have not completed any sessions yet'
+			}
+		},
 	},
 	methods: {
 		isVisited(sessionNum) {
@@ -61,38 +77,70 @@ export default {
 			console.log(visited)
 			return visited ? visited.includes(sessionNum) : false
 		},
+        daysAgoToString(days) {
+            const prefix = 'Your last session was '
+            if (days === 0) {
+                return prefix + 'today'
+            } else if (days === 1) {
+                return prefix + 'yesterday'
+            } else {
+                return prefix + days + ' days ago'
+            }
+        },
 		clearNextUp() {
 			localStorage.setItem('visitedLinks', JSON.stringify([]))
 			this.updateVisitedArr()
 		},
-        clickedUpdateVisitedArr() {
-          let timeout = window.setTimeout(() => {
-            this.updateVisitedArr()
-            window.clearTimeout(timeout)
-          }, 100)
-        },
+		clickedUpdateVisitedArr() {
+			let timeout = window.setTimeout(() => {
+				this.updateVisitedArr()
+				this.updateTime()
+				window.clearTimeout(timeout)
+			}, 100)
+		},
 		updateVisitedArr() {
-            this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
+			this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
 		},
 		isNextUp(sessionNum) {
 			return this.nextUp.sessionNum === sessionNum
 		},
-        setCompletedSessions() {
-          if (this.inputIndex >= 0 && this.inputIndex <= 29) {
-            let array = []
-            for (let i = 0; i < this.inputIndex; i++) {
-              array.push(i+1)
-            }
-            localStorage.setItem('visitedLinks', JSON.stringify(array))
-            this.updateVisitedArr()
-          } if (parseInt(this.inputIndex) === 30) {
-            localStorage.setItem('visitedLinks', JSON.stringify([]))
-            this.updateVisitedArr()
-          }
-        }
+		updateTime() {
+			localStorage.setItem('lastSession', JSON.stringify(new Date()))
+			this.getLastSessionDate()
+		},
+		getLastSessionDate() {
+			this.lastSessionDate = new Date(localStorage.getItem('lastSession'))
+		},
+		setCompletedSessions() {
+			if (this.inputIndex >= 0 && this.inputIndex <= 29) {
+				let array = []
+				for (let i = 0; i < this.inputIndex; i++) {
+					array.push(i + 1)
+				}
+				localStorage.setItem('visitedLinks', JSON.stringify(array))
+				this.updateVisitedArr()
+			}
+			if (parseInt(this.inputIndex) === 30) {
+				localStorage.setItem('visitedLinks', JSON.stringify([]))
+				this.updateVisitedArr()
+			}
+		},
+		getDaysSince(lastDate) {
+			let one_day = 1000 * 60 * 60 * 24
+
+			let present_date = new Date()
+
+			if (present_date.getMonth() === 11 && present_date.getDate() > 25) {
+				lastDate.setFullYear(lastDate.getFullYear() + 1)
+			}
+			let result = Math.round(lastDate.getTime() - present_date.getTime()) / (one_day)
+            
+            return Math.abs(parseInt(result.toFixed(0)))
+		}
 	},
 	mounted() {
 		this.updateVisitedArr()
+		this.getLastSessionDate()
 	},
 	data() {
 		return {
@@ -130,7 +178,32 @@ export default {
 			],
 			nextUpLinkIndex: null,
 			visitedArr: [],
-			inputIndex: null
+			inputIndex: null,
+			lastSessionDate: null,
+			weekdays: [
+				'Sunday',
+				'Monday',
+				'Tuesday',
+				'Wednesday',
+				'Thursday',
+				'Friday',
+				'Saturday'
+			],
+			months: [
+				'Jan',
+				'Feb',
+				'Mar',
+				'Apr',
+				'May',
+				'Jun',
+				'Jul',
+				'Aug',
+				'Sep',
+				'Oct',
+				'Nov',
+				'Dec'
+			
+			]
 		}
 	},
 	
@@ -145,7 +218,7 @@ export default {
 		text-align: center;
 		color: #2c3e50;
 		display: flex;
-      height: 100%;
+		height: 100%;
 	
 	}
 
@@ -154,50 +227,50 @@ export default {
 	}
 
 	ul {
-      padding: 20px 50px;
-      overflow: scroll;
-      margin: 0;
-      border-right: #e0e0e0 1px solid;
-      width: 200px;
-      position: relative;
-      height: 100%;
-      box-sizing: border-box;
+		padding: 20px 50px;
+		overflow: scroll;
+		margin: 0;
+		border-right: #e0e0e0 1px solid;
+		width: 200px;
+		position: relative;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
-    #list-container::before, #list-container::after {
-      position: absolute;
-      content: '';
-      height: 20px;
-      left: 0;
-      right: 0;
-      z-index: 5;
-    }
-    
-    #list-container::before {
-      top: 0;
-      background-image: linear-gradient(white, transparent);
-    }
+	#list-container::before, #list-container::after {
+		position: absolute;
+		content: '';
+		height: 20px;
+		left: 0;
+		right: 0;
+		z-index: 5;
+	}
 
-    #list-container::after {
-      bottom: 0;
-      background-image: linear-gradient(transparent, white);
-    }
-    
-    #list-container {
-      max-height: 100%;
-      position: relative;
-      width: auto;
-      
-    }
+	#list-container::before {
+		top: 0;
+		background-image: linear-gradient(white, transparent);
+	}
 
-    ul::-webkit-scrollbar {
-      display: none;
-    }
+	#list-container::after {
+		bottom: 0;
+		background-image: linear-gradient(transparent, white);
+	}
 
-    ul {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+	#list-container {
+		max-height: 100%;
+		position: relative;
+		width: auto;
+	
+	}
+
+	ul::-webkit-scrollbar {
+		display: none;
+	}
+
+	ul {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
 
 	.clear-next-up {
 		position: absolute;
@@ -249,8 +322,12 @@ export default {
 	}
 
 	#set-completed-sessions:focus ~ #set-completed-sessions-shadow {
-		opacity: 1;
+		opacity: 1 !important;
 	}
+
+    #set-completed-sessions:hover ~ #set-completed-sessions-shadow {
+      opacity: .35;
+    }
 
 	:root {
 		--color-light: #42a7b9;
@@ -266,6 +343,15 @@ export default {
 	input[type=number] {
 		-moz-appearance: textfield;
 	}
+  
+  #content {
+    margin-right: 160px;
+    flex: 1;
+  }
+  
+  #lastSession {
+    margin-top: 20px;
+  }
  
  
 </style>

@@ -77,16 +77,18 @@ export default {
   
   .next-up-indicator {
     max-width: 0;
-    width: 5px;
+    width: 6px;
     background: var(--color-dark);
     margin-right: 0;
+    /*border-radius: 3px;*/
     will-change: max-width, margin-right;
     transition: max-width 250ms, margin-right 150ms 100ms ease-out;
   }
   
   .next-up-indicator-active {
-    max-width: 5px;
+    max-width: 6px;
     margin-right: 10px;
+    
     transition: max-width 250ms, margin-right 150ms;
   
   }

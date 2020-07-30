@@ -41,20 +41,19 @@ export default {
 		margin-top: 100px;
 		flex: 1;
 		flex-direction: column;
-		margin-right: 160px;
 		align-items: center;
 		
 	}
 	
 	.title {
-		font-size: 30px;
+		font-size: 60px;
 		width: auto;
 		/*margin-right: 40px;*/
 	}
 	
 	#next-up {
 		text-decoration: none;
-		font-size: 20px;
+		font-size: 40px;
 		width: auto;
 		transition: 250ms all ease;
 		color: var(--color-light);
