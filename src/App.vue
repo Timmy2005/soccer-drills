@@ -59,7 +59,6 @@ export default {
 			}
 		},
 		lastSession() {
-			console.log(this.lastSessionDate)
 			if (this.lastSessionDate) {
 				// let dayStr = this.weekdays[this.lastSessionDate.getDay()]
 				// let dayOfMonth = this.lastSessionDate.getDate()
@@ -74,7 +73,6 @@ export default {
 	methods: {
 		isVisited(sessionNum) {
 			const visited = localStorage.getItem('visitedLinks')
-			console.log(visited)
 			return visited ? visited.includes(sessionNum) : false
 		},
         daysAgoToString(days) {
@@ -89,7 +87,9 @@ export default {
         },
 		clearNextUp() {
 			localStorage.setItem('visitedLinks', JSON.stringify([]))
+            localStorage.removeItem('lastSession')
 			this.updateVisitedArr()
+            this.getLastSessionDate()
 		},
 		clickedUpdateVisitedArr() {
 			let timeout = window.setTimeout(() => {
@@ -105,12 +105,13 @@ export default {
 			return this.nextUp.sessionNum === sessionNum
 		},
 		updateTime() {
-			localStorage.setItem('lastSession', JSON.stringify(new Date()))
+            let date = new Date()
+			localStorage.setItem('lastSession', date.toString())
 			this.getLastSessionDate()
 		},
 		getLastSessionDate() {
-			this.lastSessionDate = new Date(localStorage.getItem('lastSession'))
-		},
+            this.lastSessionDate = localStorage.getItem('lastSession') ? new Date(Date.parse(localStorage.getItem('lastSession'))) : null
+        },
 		setCompletedSessions() {
 			if (this.inputIndex >= 0 && this.inputIndex <= 29) {
 				let array = []
@@ -140,7 +141,7 @@ export default {
 	},
 	mounted() {
 		this.updateVisitedArr()
-		this.getLastSessionDate()
+		this.updateTime()
 	},
 	data() {
 		return {
