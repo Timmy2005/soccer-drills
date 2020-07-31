@@ -1,6 +1,6 @@
 <template>
   <li ref="el" class="item">
-    <a @click="addLink" :href="link" target="_blank" :class="{ 'next-up-item': isNextUp }">
+    <a @click="addLink" :href="link" target="_blank" :class="{ 'next-up-item': isNextUp, 'visited': visited }">
       <div class="next-up-indicator" :class="{ 'next-up-indicator-active': isNextUp }"></div>
       Session {{ sessionNum }}
     </a>
@@ -91,5 +91,9 @@ export default {
     
     transition: max-width 250ms, margin-right 150ms;
   
+  }
+  
+  .visited {
+    color: #949494;
   }
 </style>

@@ -63,6 +63,7 @@ export default {
 				// let dayStr = this.weekdays[this.lastSessionDate.getDay()]
 				// let dayOfMonth = this.lastSessionDate.getDate()
 				// let monthStr = this.months[this.lastSessionDate.getMonth()]
+                
                 let daysSince = this.getDaysSince(this.lastSessionDate)
 				return this.daysAgoToString(daysSince)
 			} else {
@@ -130,7 +131,7 @@ export default {
 			let one_day = 1000 * 60 * 60 * 24
 
 			let present_date = new Date()
-
+          
 			if (present_date.getMonth() === 11 && present_date.getDate() > 25) {
 				lastDate.setFullYear(lastDate.getFullYear() + 1)
 			}
@@ -141,7 +142,7 @@ export default {
 	},
 	mounted() {
 		this.updateVisitedArr()
-		this.updateTime()
+		this.getLastSessionDate()
 	},
 	data() {
 		return {
