@@ -12,7 +12,14 @@
 <script>
 export default {
 	name: 'NextUp',
-	props: ['href', 'sessionNum'],
+	computed: {
+		href() {
+			return this.$store.getters.nextUp.href
+		},
+		sessionNum() {
+			return this.$store.getters.nextUp.sessionNum
+		},
+	},
 	methods: {
 		addLink() {
 			if (this.sessionNum < 30) {
@@ -23,14 +30,20 @@ export default {
 					localStorage.setItem('visitedLinks', JSON.stringify(obj))
 				} else {
 					localStorage.setItem('visitedLinks', JSON.stringify([this.sessionNum]))
-					console.log(localStorage)
 				}
-				this.$emit('visited-changed')
+				this.updateVisitedArr()
 			} else if (parseInt(this.sessionNum) === 30) {
 				localStorage.setItem('visitedLinks', JSON.stringify([]))
-				this.$emit('visited-changed')
+				this.updateVisitedArr()
 			}
 		},
+		updateVisitedArr() {
+			let timeout = window.setTimeout(() => {
+				this.$store.dispatch('setVisitedArr')
+				this.$store.dispatch('setLastSessionDate')
+				window.clearTimeout(timeout)
+			}, 100)
+		}
 	},
 }
 </script>
@@ -48,7 +61,7 @@ export default {
 	.title {
 		font-size: 60px;
 		width: auto;
-		/*margin-right: 40px;*/
+		transition: color 250ms ease;
 	}
 	
 	#next-up {

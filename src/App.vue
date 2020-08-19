@@ -1,359 +1,277 @@
 <template>
-  <div id="app">
-    <div id="set-completed-sessions-container">
-      <div id="set-completed-sessions-container-inner">
-        <input placeholder="Session" id="set-completed-sessions" type="number" min="0" max="30"
-                @keyup.13="setCompletedSessions" v-model="inputIndex">
-        <div id="set-completed-sessions-shadow"></div>
-      </div>
-    </div>
-    <div id="list-container">
-      <ul>
-  
-        <item v-for="(link, index) in links" :link="link" :sessionNum="index+1" :key="index"
-              :visited="isVisited(index+1)" @visited-changed="clickedUpdateVisitedArr" :is-next-up="isNextUp(index+1)"/>
-      </ul>
-    </div>
-    <div id="content">
-      <next-up :session-num="nextUp.sessionNum" :href="nextUp.href" @visited-changed="clickedUpdateVisitedArr"></next-up>
-      <div id="lastSession">{{ lastSession }}</div>
-    </div>
-    <div class="clear-next-up" @click="clearNextUp">Clear</div>
-  </div>
+	<div id="app" :class="{ 'dark-theme': darkTheme }">
+		<menu-el></menu-el>
+		<top-bar></top-bar>
+		<div id="main-content">
+			<div id="list-container">
+				<ul ref="list">
+					<next-up-item-indicator></next-up-item-indicator>
+					<item v-for="(link, index) in links" :index="index" :key="index"/>
+				</ul>
+			</div>
+			<div id="content">
+				<next-up></next-up>
+				<div id="lastSession">{{ lastSession }}</div>
+			</div>
+		</div>
+	</div>
 </template>
-
 <script>
-import Item from './components/Item.vue'
-import NextUp from './components/NextUp.vue'
-
-export default {
-	name: 'App',
-	components: {
-		Item,
-		NextUp
-	},
-	computed: {
-		nextUp() {
-			let runningIndex = 1
-			
-			const that = this
-			
-			that.nextUpLinkIndex = null
-			if (that.visitedArr.length > 0) {
-				for (let i of that.visitedArr) {
-					if (runningIndex !== i) {
-						that.nextUpLinkIndex = runningIndex
-						break
-					}
-					runningIndex++
-				}
-				if (!this.nextUpLinkIndex) {
-					that.nextUpLinkIndex = that.visitedArr[that.visitedArr.length - 1] + 1
-				}
-			} else {
-				that.nextUpLinkIndex = 1
-			}
-			return {
-				sessionNum: that.nextUpLinkIndex,
-				href: this.links[this.nextUpLinkIndex - 1]
-			}
-		},
-		lastSession() {
-			if (this.lastSessionDate) {
-				// let dayStr = this.weekdays[this.lastSessionDate.getDay()]
-				// let dayOfMonth = this.lastSessionDate.getDate()
-				// let monthStr = this.months[this.lastSessionDate.getMonth()]
-                
-                let daysSince = this.getDaysSince(this.lastSessionDate)
-				return this.daysAgoToString(daysSince)
-			} else {
-				return 'You have not completed any sessions yet'
-			}
-		},
-	},
-	methods: {
-		isVisited(sessionNum) {
-			const visited = localStorage.getItem('visitedLinks')
-			return visited ? visited.includes(sessionNum) : false
-		},
-        daysAgoToString(days) {
-            const prefix = 'Your last session was '
-            if (days === 0) {
-                return prefix + 'today'
-            } else if (days === 1) {
-                return prefix + 'yesterday'
-            } else {
-                return prefix + days + ' days ago'
-            }
-        },
-		clearNextUp() {
-			localStorage.setItem('visitedLinks', JSON.stringify([]))
-            localStorage.removeItem('lastSession')
-			this.updateVisitedArr()
-            this.getLastSessionDate()
-		},
-		clickedUpdateVisitedArr() {
-			let timeout = window.setTimeout(() => {
-				this.updateVisitedArr()
-				this.updateTime()
-				window.clearTimeout(timeout)
-			}, 100)
-		},
-		updateVisitedArr() {
-			this.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
-		},
-		isNextUp(sessionNum) {
-			return this.nextUp.sessionNum === sessionNum
-		},
-		updateTime() {
-            let date = new Date()
-			localStorage.setItem('lastSession', date.toString())
-			this.getLastSessionDate()
-		},
-		getLastSessionDate() {
-            this.lastSessionDate = localStorage.getItem('lastSession') ? new Date(Date.parse(localStorage.getItem('lastSession'))) : null
-        },
-		setCompletedSessions() {
-			if (this.inputIndex >= 0 && this.inputIndex <= 29) {
-				let array = []
-				for (let i = 0; i < this.inputIndex; i++) {
-					array.push(i + 1)
-				}
-				localStorage.setItem('visitedLinks', JSON.stringify(array))
-				this.updateVisitedArr()
-			}
-			if (parseInt(this.inputIndex) === 30) {
-				localStorage.setItem('visitedLinks', JSON.stringify([]))
-				this.updateVisitedArr()
-			}
-		},
-		getDaysSince(lastDate) {
-			let one_day = 1000 * 60 * 60 * 24
-
-			let present_date = new Date()
-          
-			if (present_date.getMonth() === 11 && present_date.getDate() > 25) {
-				lastDate.setFullYear(lastDate.getFullYear() + 1)
-			}
-			let result = Math.round(lastDate.getTime() - present_date.getTime()) / (one_day)
-            
-            return Math.abs(parseInt(result.toFixed(0)))
-		}
-	},
-	mounted() {
-		this.updateVisitedArr()
-		this.getLastSessionDate()
-	},
-	data() {
-		return {
-			links: [
-				'https://www.facebook.com/318748909507/videos/649968942464224',
-				'https://www.facebook.com/318748909507/videos/2612971758972997/',
-				'https://www.facebook.com/318748909507/videos/498942800766464/',
-				'https://www.facebook.com/318748909507/videos/527572888153782/',
-				'https://www.facebook.com/318748909507/videos/926772904410122/',
-				'https://www.facebook.com/318748909507/videos/2574431759464489/',
-				'https://www.facebook.com/318748909507/videos/247198643102613/',
-				'https://www.facebook.com/318748909507/videos/1588663631296750/',
-				'https://www.facebook.com/318748909507/videos/2665635223721596/',
-				'https://www.facebook.com/318748909507/videos/2669484819990940/',
-				'https://www.facebook.com/318748909507/videos/535514280498748/',
-				'https://www.facebook.com/318748909507/videos/3697736870267369/',
-				'https://www.facebook.com/318748909507/videos/705004410305115/',
-				'https://www.facebook.com/318748909507/videos/3025730300817570/',
-				'https://www.facebook.com/318748909507/videos/222023952224132/',
-				'https://www.facebook.com/318748909507/videos/659991487900808/',
-				'https://www.facebook.com/318748909507/videos/629913900921785/',
-				'https://www.facebook.com/318748909507/videos/2911103542318651/',
-				'https://www.facebook.com/318748909507/videos/836336946858397/',
-				'https://www.facebook.com/318748909507/videos/245310483493661/',
-				'https://www.facebook.com/318748909507/videos/251541702868527/',
-				'https://www.facebook.com/318748909507/videos/2614751715434132/',
-				'https://www.facebook.com/318748909507/videos/165132848228069/',
-				'https://www.facebook.com/318748909507/videos/184435959355973/',
-				'https://www.facebook.com/318748909507/videos/244576203543813/',
-				'https://www.facebook.com/318748909507/videos/276445793512600/',
-				'https://www.facebook.com/318748909507/videos/710323713052933/',
-				'https://www.facebook.com/318748909507/videos/246632956586240/',
-				'https://www.facebook.com/318748909507/videos/556846081927489/',
-				'https://www.facebook.com/318748909507/videos/171019884353180/'
-			],
-			nextUpLinkIndex: null,
-			visitedArr: [],
-			inputIndex: null,
-			lastSessionDate: null,
-			weekdays: [
-				'Sunday',
-				'Monday',
-				'Tuesday',
-				'Wednesday',
-				'Thursday',
-				'Friday',
-				'Saturday'
-			],
-			months: [
-				'Jan',
-				'Feb',
-				'Mar',
-				'Apr',
-				'May',
-				'Jun',
-				'Jul',
-				'Aug',
-				'Sep',
-				'Oct',
-				'Nov',
-				'Dec'
-			
-			]
-		}
-	},
+	import Item from './components/item-list/Item.vue'
+	import NextUp from './components/NextUp.vue'
+	import TopBar from './components/TopBar.vue'
+	import NextUpItemIndicator from './components/item-list/NextUpItemIndicator.vue'
+	import Menu from './components/menu/Menu.vue'
 	
-}
+	export default {
+		name: 'App',
+		components: {
+			Item,
+			NextUp,
+			TopBar,
+			NextUpItemIndicator,
+			MenuEl: Menu,
+		},
+		computed: {
+			darkTheme() {
+				const darkTheme = this.$store.state.darkTheme
+				document.body.style.background = darkTheme ? '#292929' : 'white'
+				return darkTheme
+			},
+			nextUp() {
+				return this.$store.getters.nextUp
+			},
+			lastSession() {
+				if (this.lastSessionDate) {
+					let daysSince = this.getDaysSince(this.lastSessionDate)
+					return this.daysAgoToString(daysSince)
+				} else {
+					return 'You have not completed any sessions yet'
+				}
+			},
+			visitedArr() {
+				return this.$store.state.visitedArr
+			},
+			lastSessionDate() {
+				return this.$store.state.lastSessionDate
+			},
+			links() {
+				return this.$store.state.links
+			}
+		},
+		methods: {
+			scrollTo(element, to, duration) {
+				const that = this
+				let toMod = to > element.offsetHeight ? element.offsetHeight : to
+				let start = element.scrollTop,
+					change = toMod - start,
+					currentTime = 0,
+					increment = 20;
+				
+				let animateScroll = function () {
+					currentTime += increment;
+					element.scrollTop = that.easeInOutQuad(currentTime, start, change, duration);
+					if (currentTime < duration) {
+						setTimeout(animateScroll, increment);
+					}
+				};
+				animateScroll();
+			},
+			easeInOutQuad(t, b, c, d) {
+				t /= d / 2;
+				if (t < 1) return c / 2 * t * t + b;
+				t--;
+				return -c / 2 * (t * (t - 2) - 1) + b;
+			},
+			daysAgoToString(days) {
+				const prefix = 'Your last session was '
+				if (days === 0) {
+					return prefix + 'today'
+				} else if (days === 1) {
+					return prefix + 'yesterday'
+				} else {
+					return prefix + days + ' days ago'
+				}
+			},
+			getDaysSince(lastDate) {
+				let one_day = 1000 * 60 * 60 * 24
+				
+				let present_date = new Date()
+				
+				if (present_date.getMonth() === 11 && present_date.getDate() > 25) {
+					lastDate.setFullYear(lastDate.getFullYear() + 1)
+				}
+				let result = Math.round(lastDate.getTime() - present_date.getTime()) / (one_day)
+				
+				return Math.abs(parseInt(result.toFixed(0)))
+			}
+		},
+		watch: {
+			nextUp() {
+				let that = this
+				this.$nextTick(() => {
+					let nextItemElTop = document.getElementsByClassName('next-up-item')[0].offsetTop - 300
+					that.scrollTo(that.$refs.list, nextItemElTop, 500)
+				})
+			}
+		},
+		mounted() {
+			this.$store.dispatch('setVisitedArr')
+			this.$store.dispatch('setLastSessionDate')
+		},
+		data() {
+			return {
+				weekdays: [
+					'Sunday',
+					'Monday',
+					'Tuesday',
+					'Wednesday',
+					'Thursday',
+					'Friday',
+					'Saturday'
+				],
+				months: [
+					'Jan',
+					'Feb',
+					'Mar',
+					'Apr',
+					'May',
+					'Jun',
+					'Jul',
+					'Aug',
+					'Sep',
+					'Oct',
+					'Nov',
+					'Dec'
+				
+				]
+			}
+		}
+		
+	}
 </script>
-
 <style>
-    #app {
+	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
-		color: #2c3e50;
+		color: var(--text-color);
 		display: flex;
+		flex-direction: column;
 		height: 100%;
-	
+		background: var(--background);
+		transition: var(--dark-theme-background-transition);
+		
 	}
-
+	
+	#main-content {
+		display: flex;
+		flex: 1;
+		overflow: hidden;
+	}
+	
 	a:visited + a {
 		display: flex;
 	}
-
+	
 	ul {
-		padding: 20px 50px;
+		padding: 20px 60px 20px 50px;
 		overflow: scroll;
 		margin: 0;
-		border-right: #e0e0e0 1px solid;
-		width: 200px;
+		border-right: var(--border-color) 1px solid;
+		transition: var(--dark-theme-border-transition);
 		position: relative;
 		height: 100%;
 		box-sizing: border-box;
 	}
-
-	#list-container::before, #list-container::after {
+	
+	#list-container::after, #list-container::before {
 		position: absolute;
 		content: '';
-		height: 20px;
+		height: 50px;
 		left: 0;
 		right: 0;
 		z-index: 5;
+		border-right: var(--border-color) 1px solid;
+		transition: var(--dark-theme-border-transition), opacity 250ms ease;
+		bottom: -10px;
 	}
-
-	#list-container::before {
-		top: 0;
-		background-image: linear-gradient(white, transparent);
-	}
-
+	
 	#list-container::after {
-		bottom: 0;
 		background-image: linear-gradient(transparent, white);
+		
 	}
-
+	
+	#list-container::before {
+		background-image: linear-gradient(transparent, #292929);
+		
+	}
+	
+	#app.dark-theme #list-container::after {
+		opacity: 0;
+	}
+	
+	#app:not(.dark-theme) #list-container::before {
+		opacity: 0;
+	}
+	
 	#list-container {
 		max-height: 100%;
 		position: relative;
 		width: auto;
-	
+		
 	}
-
+	
 	ul::-webkit-scrollbar {
 		display: none;
 	}
-
+	
 	ul {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 	}
-
-	.clear-next-up {
-		position: absolute;
-		right: 20px;
-		top: 20px;
-		font-size: 15px;
-		cursor: pointer;
-	}
-
-	#set-completed-sessions {
-		--color: #2f6b8c;
-		outline: none;
-		border: none;
-		font-family: Avenir, Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		color: var(--color-light);
-		width: 50px;
-	}
-
-	#set-completed-sessions-container {
-		position: absolute;
-		top: 15px;
-		right: 75px;
 	
-	}
-
-	#set-completed-sessions-container-inner {
-		padding: 4px 14px;
-		margin-bottom: 10px;
-		border-radius: 30px;
-		border: var(--color-dark) 1px solid;
-		position: relative;
-	}
-
-	#set-completed-sessions-shadow {
-		width: 100%;
-		height: 100%;
-		box-shadow: 0 0 5px 0 var(--color-light);
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		border-radius: 30px;
-		z-index: -1;
-		opacity: 0;
-		transition: opacity 150ms ease;
-	}
-
-	#set-completed-sessions:focus ~ #set-completed-sessions-shadow {
-		opacity: 1 !important;
-	}
-
-    #set-completed-sessions:hover ~ #set-completed-sessions-shadow {
-      opacity: .35;
-    }
-
-	:root {
+	#app:not(.dark-theme) {
+		--background: white;
+		--border-color: #e0e0e0;
+		--text-color: #2c3e50;
 		--color-light: #42a7b9;
 		--color-dark: #2f6b8c;
+		--dark-grey: #949494
 	}
-
+	
+	#app.dark-theme {
+		--background: #292929;
+		--border-color: #555555;
+		--text-color: #eeeeee;
+		--color-light: #6fbdcb;
+		--color-dark: #4997c2;
+		--dark-grey: #b7b7b7
+	}
+	
+	#app {
+		--dark-theme-background-transition: 250ms background ease;
+		--dark-theme-border-transition: 250ms border ease;
+	}
+	
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
 	}
-
+	
 	input[type=number] {
 		-moz-appearance: textfield;
 	}
-  
-  #content {
-    margin-right: 160px;
-    flex: 1;
-  }
-  
-  #lastSession {
-    margin-top: 20px;
-  }
- 
- 
+	
+	#content {
+		margin-right: 160px;
+		flex: 1;
+	}
+	
+	#lastSession {
+		margin-top: 20px;
+		transition: color 250ms ease;
+	}
 </style>
