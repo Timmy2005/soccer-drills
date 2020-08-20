@@ -25,8 +25,6 @@ SECRET_KEY = '+p@chx*1%wzkj&#&^bcdveo5#=t*0=m20#o#fxy%l4lf$c29wn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -54,7 +52,7 @@ ROOT_URLCONF = 'web.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'static/../../static/public')],
+        'DIRS': [os.path.join(BASE_DIR, '../static/public')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,16 +71,16 @@ WSGI_APPLICATION = 'web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'soccerdrills',
-        'USER': 'timothy',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'soccerdrills',
+#         'USER': 'timothy',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 
 # Password validation

@@ -1,5 +1,11 @@
 from .base import *
 
-DEBUG = False
+DEBUG = True
+
+# ALLOWED_HOSTS = ['http://127.0.0.1:8000/']
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, '../static'),
+)
