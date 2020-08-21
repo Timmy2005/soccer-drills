@@ -2,6 +2,8 @@
   <dictionary name="timothycleveland">
     <words>
       <w>gunicorn</w>
+      <w>herokuapp</w>
+      <w>mysoccerdrills</w>
       <w>postgresql</w>
       <w>pythonpath</w>
       <w>soccerdrills</w>

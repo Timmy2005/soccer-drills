@@ -8,7 +8,7 @@ ROOT_PATH = os.path.dirname(__file__)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', 'mysoccerdrills.herokuapp.com']
 
 django_heroku.settings(locals())
 
