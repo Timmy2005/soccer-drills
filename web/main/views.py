@@ -5,7 +5,6 @@ from django.http import HttpResponse
 
 
 def main_page(request):
-    print('hi')
     response = dumps({
         'status': 'ok'
     })
