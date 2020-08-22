@@ -1,0 +1,37 @@
+#app:not(.dark-theme) {
+	--background: white;
+	--border-color: #e0e0e0;
+	--text-color: #2c3e50;
+	--color-light: #42a7b9;
+	--color-dark: #2f6b8c;
+	--dark-grey: #949494;
+	--text-field-label-color: rgba(0, 0, 0, 0.6);
+	--text-field-color: rgba(0, 0, 0, 0.87);
+}
+
+#app.dark-theme {
+	--background: #292929;
+	--border-color: #555555;
+	--text-color: #eeeeee;
+	--color-light: #82c0cb;
+	--color-dark: #447591;
+	--dark-grey: #b7b7b7;
+	--text-field-label-color: rgba(255, 255, 255, 0.6);
+	--text-field-color: rgba(255, 255, 255, 0.87);
+	--mdc-theme-error: #e0485f;
+	
+}
+
+#app {
+	--dark-theme-background-transition: 250ms background ease;
+	--dark-theme-border-transition: 250ms border ease;
+	--mdc-theme-primary: var(--color-dark)
+}
+
+#app:not(.dark-theme) .mdc-icon-button::before, #app:not(.dark-theme) .mdc-icon-button::after {
+	background-color: #000;
+}
+
+#app.dark-theme .mdc-icon-button::before, #app.dark-theme .mdc-icon-button::after {
+	background-color: white;
+}

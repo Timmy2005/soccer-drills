@@ -14,7 +14,7 @@
             }
         }
 
-        const main = document.getElementById('app');
+        const main = document.getElementById('main');
         let navSidebarIsOpen = localStorage.getItem('django.admin.navSidebarIsOpen');
         if (navSidebarIsOpen === null) {
             navSidebarIsOpen = 'true';
