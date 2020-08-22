@@ -2,6 +2,7 @@
 	<div id="top-app-bar">
 		<div class="header-section">
 			<button id="menu-icon" class="mdc-icon-button material-icons" @click="openMenu" v-icon-button>menu</button>
+			<div class="logo-container"></div>
 		</div>
 		<div class="header-section">
 			<set-completed-sessions></set-completed-sessions>

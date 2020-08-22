@@ -1,6 +1,9 @@
 <template>
 	<div id="menu-top">
 		<button id="back-icon" class="mdc-icon-button material-icons" @click="closeMenu" v-icon-button>arrow_back</button>
+		<div class="logo-container-wrapper">
+			<div class="logo-container"></div>
+		</div>
 	</div>
 </template>
 <script>
@@ -39,5 +42,12 @@
 		--mdc-ripple-top: 6px;
 		--mdc-ripple-left: 6px;
 		--mdc-ripple-fg-size: 24px
+	}
+	
+	.logo-container-wrapper {
+		display: flex;
+		flex: 1;
+		justify-content: center;
+		margin-right: 45px;
 	}
 </style>

@@ -5,7 +5,7 @@ import router from './routes.js'
 import axios from 'axios'
 
 import '../../css/icons.css'
-import 'material-components-web/dist/material-components-web.css'
+import '../../css/material.css'
 import '../../css/common-login.css'
 
 import VueRouter from 'vue-router'

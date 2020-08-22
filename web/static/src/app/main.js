@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 let darkTheme = localStorage.getItem('darkTheme') === 'true'
 
 import '../../css/icons.css'
-import 'material-components-web/dist/material-components-web.css'
+import '../../css/material.css'
 
 store.dispatch('toggleDarkTheme', darkTheme).then(() => {
     new Vue({

@@ -7,6 +7,7 @@
 	--dark-grey: #949494;
 	--text-field-label-color: rgba(0, 0, 0, 0.6);
 	--text-field-color: rgba(0, 0, 0, 0.87);
+	--logo: url('../src/assets/logo_light.svg')
 }
 
 #app.dark-theme {
@@ -19,6 +20,7 @@
 	--text-field-label-color: rgba(255, 255, 255, 0.6);
 	--text-field-color: rgba(255, 255, 255, 0.87);
 	--mdc-theme-error: #e0485f;
+	--logo: url('../src/assets/logo_dark.svg')
 	
 }
 

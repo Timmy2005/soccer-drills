@@ -1,7 +1,7 @@
 <template>
 	<div id="app" :class="{ 'dark-theme': darkTheme }">
 		<div id="main-card">
-			<div id="logo-container"></div>
+			<div class="logo-container"></div>
 			<div id="content">
 				<transition :name="'slide-' + transitionDirection">
 					<router-view></router-view>
@@ -77,12 +77,13 @@
 		overflow: hidden;
 	}
 	
-	#logo-container {
-		/*background: url('../../../images/common/logo_large.png') center no-repeat;*/
+	.logo-container {
+		background: var(--logo) center no-repeat;
 		width: 300px;
 		height: 82px;
 		background-size: 75%;
 		margin-bottom: 30px;
+		margin-right: 20px;
 		min-height: 82px;
 	}
 	

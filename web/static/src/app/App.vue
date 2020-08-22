@@ -255,4 +255,11 @@
 	.mdc-icon-button::before {
 		transition: opacity 100ms linear, background-color 250ms linear !important;
 	}
+	
+	.logo-container {
+		background: var(--logo) center no-repeat;
+		width: 150px;
+		height: 36px;
+		background-size: 75%;
+	}
 </style>
