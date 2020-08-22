@@ -32,7 +32,7 @@
 		will-change: top;
 		transition: top ease 500ms, background ease 250ms;
 		position: absolute;
-		top: 0;
+		top: 20px;
 		left: 0;
 		height: 32px;
 		margin: 5px 0;

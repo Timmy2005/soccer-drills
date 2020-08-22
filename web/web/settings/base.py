@@ -13,12 +13,27 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+def get_env_variable(var_name):
+    """
+    Attempts to get the value of an environment variable from the OS.
+    :param var_name: The name of the environment variable.
+    :return: The value of the environment variable
+    """
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "The %s environment variable is not set." % var_name
+        raise ImproperlyConfigured(error_msg)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '+p@chx*1%wzkj&#&^bcdveo5#=t*0=m20#o#fxy%l4lf$c29wn'
@@ -35,6 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'reversion',
+    'main',
+    'web.apps.WebConfig'
 ]
 
 MIDDLEWARE = [
@@ -75,11 +93,11 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'soccerdrills',
-        'USER': 'timothy',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': get_env_variable('DATABASE_NAME'),
+        'USER': get_env_variable('DATABASE_USER'),
+        'PASSWORD': get_env_variable('DATABASE_PASSWORD'),
+        'HOST': get_env_variable('DATABASE_HOST'),
+        'PORT': get_env_variable('DATABASE_PORT'),
     }
 }
 

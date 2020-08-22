@@ -245,8 +245,8 @@
 		--background: #292929;
 		--border-color: #555555;
 		--text-color: #eeeeee;
-		--color-light: #6fbdcb;
-		--color-dark: #4997c2;
+		--color-light: #82c0cb;
+		--color-dark: #447591;
 		--dark-grey: #b7b7b7
 	}
 	

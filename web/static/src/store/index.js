@@ -103,7 +103,7 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		setVisitedArr(state) {
-			state.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b)
+			state.visitedArr = JSON.parse(localStorage.getItem('visitedLinks')) ? JSON.parse(localStorage.getItem('visitedLinks')).sort((a, b) => a - b) : []
 		},
 		setInputIndexInputValue(state, value) {
 			state.inputIndex = value
