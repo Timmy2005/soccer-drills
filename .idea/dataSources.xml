@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/zippymeals</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="db" uuid="262c1999-cacd-4e45-80f7-c74564a30da6">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/web/db.sqlite3</jdbc-url>
+    </data-source>
   </component>
 </project>
