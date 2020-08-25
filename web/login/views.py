@@ -7,6 +7,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
+from app.models import UserSettings
 
 
 @ensure_csrf_cookie
@@ -50,6 +51,11 @@ def register_user(request):
     if not username_taken:
         new_user = User.objects.create_user(username, None, password)
         new_user.save()
+
+        new_user_settings = UserSettings()
+        new_user_settings.user = new_user
+        new_user_settings.save()
+
         login(request, new_user)
 
         response = dumps({

@@ -1,64 +1,33 @@
 <template>
-	<div id="app" :class="{ 'dark-theme': darkTheme }">
+	<div id="app" :class="{ 'dark-theme': darkTheme, 'not-loaded': !loaded }">
 		<div id="menu-overlay" @click="closeMenu" :class="{ 'menu-overlay-open': menuOpen }"></div>
 		<menu-el></menu-el>
 		<top-bar></top-bar>
-		<div id="main-content">
-			<div id="list-container">
-				<ul ref="list">
-					<next-up-item-indicator></next-up-item-indicator>
-					<item v-for="(link, index) in links" :index="index" :key="index"/>
-				</ul>
-			</div>
-			<div id="content">
-				<next-up></next-up>
-				<div id="lastSession">{{ lastSession }}</div>
-			</div>
-		</div>
+		<router-view></router-view>
 	</div>
 </template>
 <script>
-	import Item from './components/item-list/Item.vue'
-	import NextUp from './components/NextUp.vue'
-	import TopBar from './components/TopBar.vue'
-	import NextUpItemIndicator from './components/item-list/NextUpItemIndicator.vue'
+	import TopBar from './components/top-bar/TopBar.vue'
 	import Menu from './components/menu/Menu.vue'
+	
 	import '../../css/themes.css'
 	
 	export default {
 		name: 'App',
 		components: {
-			Item,
-			NextUp,
 			TopBar,
-			NextUpItemIndicator,
 			MenuEl: Menu
+		},
+		data() {
+			return {
+				loaded: false
+			}
 		},
 		computed: {
 			darkTheme() {
 				const darkTheme = this.$store.state.darkTheme
 				document.body.style.background = darkTheme ? '#292929' : 'white'
 				return darkTheme
-			},
-			nextUp() {
-				return this.$store.getters.nextUp
-			},
-			lastSession() {
-				if (this.lastSessionDate) {
-					let daysSince = this.getDaysSince(this.lastSessionDate)
-					return this.daysAgoToString(daysSince)
-				} else {
-					return 'You have not completed any sessions yet'
-				}
-			},
-			visitedArr() {
-				return this.$store.state.visitedArr
-			},
-			lastSessionDate() {
-				return this.$store.state.lastSessionDate
-			},
-			links() {
-				return this.$store.state.links
 			},
 			menuOpen() {
 				return this.$store.state.menu.open
@@ -67,68 +36,16 @@
 		methods: {
 			closeMenu() {
 				this.$store.dispatch('closeMenu')
-			},
-			scrollTo(element, to, duration) {
-				const that = this
-				let toMod = to > element.offsetHeight ? element.offsetHeight : to
-				let start = element.scrollTop,
-					change = toMod - start,
-					currentTime = 0,
-					increment = 20
-				
-				let animateScroll = function () {
-					currentTime += increment
-					element.scrollTop = that.easeInOutQuad(currentTime, start, change, duration)
-					if (currentTime < duration) {
-						setTimeout(animateScroll, increment)
-					}
-				}
-				animateScroll()
-			},
-			easeInOutQuad(t, b, c, d) {
-				t /= d / 2
-				if (t < 1) {
-					return c / 2 * t * t + b
-				}
-				t--
-				return -c / 2 * (t * (t - 2) - 1) + b
-			},
-			daysAgoToString(days) {
-				const prefix = 'Your last session was '
-				if (days === 0) {
-					return prefix + 'today'
-				} else if (days === 1) {
-					return prefix + 'yesterday'
-				} else {
-					return prefix + days + ' days ago'
-				}
-			},
-			getDaysSince(lastDate) {
-				let one_day = 1000 * 60 * 60 * 24
-				
-				let present_date = new Date()
-				
-				if (present_date.getMonth() === 11 && present_date.getDate() > 25) {
-					lastDate.setFullYear(lastDate.getFullYear() + 1)
-				}
-				let result = Math.round(lastDate.getTime() - present_date.getTime()) / (one_day)
-				
-				return Math.abs(parseInt(result.toFixed(0)))
-			}
-		},
-		watch: {
-			nextUp() {
-				let that = this
-				this.$nextTick(() => {
-					let nextItemElTop = document.getElementsByClassName('next-up-item')[0].offsetTop - 300
-					that.scrollTo(that.$refs.list, nextItemElTop, 500)
-				})
 			}
 		},
 		mounted() {
+			this.loaded = true
+			this.$nextTick(() => {
+				document.getElementById('p-container').remove()
+			})
 			this.$store.dispatch('setVisitedArr')
 			this.$store.dispatch('setLastSessionDate')
-		},
+		}
 	}
 </script>
 <style>
@@ -146,22 +63,25 @@
 		
 	}
 	
+	#app.not-loaded {
+		display: none;
+	}
+	
 	#main-content {
 		display: flex;
 		flex: 1;
 		overflow: hidden;
+		position: relative;
 	}
 	
 	a:visited + a {
 		display: flex;
 	}
 	
-	ul {
+	#item-list {
 		padding: 20px 60px 20px 50px;
 		overflow: scroll;
 		margin: 0;
-		border-right: var(--border-color) 1px solid;
-		transition: var(--dark-theme-border-transition);
 		position: relative;
 		height: 100%;
 		box-sizing: border-box;
@@ -174,9 +94,9 @@
 		left: 0;
 		right: 0;
 		z-index: 5;
-		border-right: var(--border-color) 1px solid;
-		transition: var(--dark-theme-border-transition), opacity 250ms ease;
 		bottom: -10px;
+		pointer-events: none;
+		transition: opacity 250ms ease;
 	}
 	
 	#list-container::after {
@@ -201,14 +121,16 @@
 		max-height: 100%;
 		position: relative;
 		width: auto;
-		
+		border-right: var(--border-color) 1px solid;
+		transition: var(--dark-theme-border-transition);
+		min-width: 190px;
 	}
 	
-	ul::-webkit-scrollbar {
+	#item-list::-webkit-scrollbar {
 		display: none;
 	}
 	
-	ul {
+	#item-list {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 	}
@@ -261,5 +183,14 @@
 		width: 150px;
 		height: 36px;
 		background-size: 75%;
+	}
+	
+	.content-placeholder {
+		background: var(--content-placeholder);
+		transition: background 250ms ease;
+	}
+	
+	.router-link-active {
+		outline: none;
 	}
 </style>

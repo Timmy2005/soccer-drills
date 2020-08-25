@@ -27,6 +27,7 @@
 		padding: 20px;
 		display: flex;
 		align-items: center;
+		/*border-bottom: 1px solid var(--border-color)*/
 	}
 	
 	#back-icon {

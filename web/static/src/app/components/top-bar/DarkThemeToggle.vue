@@ -38,7 +38,7 @@
 	#dark-theme-toggle-slider {
 		width: var(--height);
 		height: var(--height);
-		background: var(--background);
+		background: var(--header-background);
 		border-radius: calc(var(--width) / 2);
 		transition: var(--transition), background 250ms;
 		will-change: margin-left;

@@ -17,8 +17,6 @@ Vue.config.productionTip = false
 
 let darkTheme = localStorage.getItem('darkTheme') === 'true'
 
-console.log(darkTheme)
-
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios

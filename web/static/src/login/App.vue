@@ -9,13 +9,6 @@
 			</div>
 		</div>
 		<input type="hidden" :value="route">
-<!--		<transition name="demo-sign-in">-->
-<!--			<div class="demo-sign-in-button-container" v-if="route === '/'">-->
-<!--				<div class="demo-sign-in-button" @click="loginDemo">-->
-<!--					Sign In as Demo Staff User-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</transition>-->
 	</div>
 </template>
 <script>
@@ -35,7 +28,6 @@
 					let routeIndex = this.$store.state.routes.findIndex(route => route === path)
 					this.$store.dispatch('setRoute', routeIndex)
 					this.$store.dispatch('turnOffRedirect')
-					console.log(routeIndex)
 					
 				}
 				

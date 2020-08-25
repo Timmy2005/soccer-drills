@@ -5,17 +5,29 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="icon" sizes="32x32" href="{% static "src/assets/favicon.svg" %}"/>
-		<title>Soccer drills</title>
+		{% if dark_theme %}
+			<link rel="icon" sizes="32x32" href="{% static "src/assets/favicon_dark.svg" %}"/>
+		{% else %}
+			<link rel="icon" sizes="32x32" href="{% static "src/assets/favicon_light.svg" %}"/>
+		{% endif %}
+		<title>Session</title>
 		<style>
 			html, body {
 				height: 100%;
 				margin: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 			}
 		</style>
 	</head>
 	<body>
+		{% include "index_prefetch.html" %}
 		<div id="app"></div>
 		<script src="{% static "dist/app.js" %}" type="module"></script>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			  rel="stylesheet">
 	</body>
 </html>

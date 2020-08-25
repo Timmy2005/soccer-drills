@@ -1,15 +1,18 @@
 <template>
 	<div id="menu" :class="{ 'menu-open': menuOpen }">
 		<top></top>
+		<menu-items></menu-items>
 	</div>
 </template>
 <script>
 	import Top from './Top.vue'
+	import MenuItems from './MenuItems.vue'
 	
 	export default {
 		name: 'Menu',
 		components: {
-			Top
+			Top,
+			MenuItems
 		},
 		computed: {
 			menuOpen() {
