@@ -8,7 +8,15 @@ from app.models import Session, Group, UserSettings
 
 def render_app(request):
     user = request.user
-    dark_theme = UserSettings.objects.get(user=user).dark_theme
+    user_settings = UserSettings.objects.filter(user=user).first()
+    if user_settings:
+        dark_theme = user_settings.dark_theme
+    else:
+        new_user_settings = UserSettings()
+        new_user_settings.user = user
+        new_user_settings.save()
+
+        dark_theme = new_user_settings.dark_theme
     return render(request, 'index.html', {
         'dark_theme': dark_theme
     })

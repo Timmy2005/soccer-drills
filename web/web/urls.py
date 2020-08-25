@@ -29,9 +29,9 @@ urlpatterns = [
     path('register/', login_views.login_page),
     path('register-user/', login_views.register_user),
 
-    path('get-sessions/', app_views.get_sessions_by_group),
-    path('get-groups/', app_views.get_groups),
+    path('get-sessions/', login_required(app_views.get_sessions_by_group)),
+    path('get-groups/', login_required(app_views.get_groups)),
 
-    path('set-dark-theme/', app_views.set_dark_theme)
+    path('set-dark-theme/', login_required(app_views.set_dark_theme))
 
 ]

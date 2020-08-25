@@ -2,7 +2,7 @@
 	<div id="main-container">
 		<div id="inner-next-up-container">
 			<div class="title">Next up</div>
-			<a v-if="href && sessionNum" id="next-up" :href="href" target="_blank" @click="addLink">
+			<a v-if="href && sessionNum" id="next-up" :href="href.link" target="_blank" @click="addLink">
 				<div>
 					Session {{ sessionNum }}
 				</div>
