@@ -8,7 +8,7 @@ module.exports = merge(common, {
 		minimize: true,
 		minimizer: [
 			new TerserPlugin({
-				cache: true,
+				cache: false,
 			}),
 		],
 	},
