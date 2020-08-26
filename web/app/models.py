@@ -8,6 +8,7 @@ class Session(models.Model):
     link = models.TextField()
     index = models.IntegerField()
     group = models.ForeignKey('Group', on_delete=models.CASCADE)
+    name = models.TextField(default=None, null=True)
 
     class Meta:
         indexes = [

@@ -149,7 +149,7 @@ input:-webkit-autofill:active {
 	color: var(--text-field-color);
 }
 
-.mdc-text-field--filled {
+.mdc-text-field--filled:not(.mdc-text-field--textarea) {
 	display: flex;
 	background: transparent;
 	padding: 0 2px;

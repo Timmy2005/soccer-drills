@@ -24,6 +24,9 @@
 			groupItem() {
 				return this.$store.state.groups[this.index]
 			}
+		},
+		mounted() {
+			this.$store.dispatch('setGroupsMounted')
 		}
 	}
 </script>

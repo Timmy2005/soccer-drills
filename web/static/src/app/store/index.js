@@ -16,6 +16,7 @@ export default new Vuex.Store({
 		menu: {
 			open: false
 		},
+		groupsMounted: false,
 		darkTheme: false,
 	},
 	modules: {
@@ -76,6 +77,7 @@ export default new Vuex.Store({
 			axios.post('/get-groups/')
 				.then((response) => {
 					commit('setGroups', response.data)
+					commit('setGroupsMounted')
 				})
 				.catch((error) => {
 					console.log(error)
@@ -107,6 +109,9 @@ export default new Vuex.Store({
 				console.log(error)
 			})
 		},
+		setGroupsMounted({commit}) {
+			commit('setGroupsMounted')
+		}
 	},
 	mutations: {
 		setVisitedArr(state) {
@@ -130,6 +135,9 @@ export default new Vuex.Store({
 		},
 		setGroups(state, groupSet) {
 			Vue.set(state, 'groups', groupSet)
+		},
+		setGroupsMounted(state) {
+			state.groupsMounted = true
 		}
 	}
 })

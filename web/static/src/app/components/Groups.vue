@@ -1,7 +1,7 @@
 <template>
 	<div id="main-content">
 		<div id="groups-header">Groups</div>
-		<div class="groups">
+		<div class="groups" v-show="groupsMounted">
 			<group-item v-for="(group, index) in groups" :index="index" :key="index"></group-item>
 			<router-link to="/groups/new" id="new-group-button-container">
 				<div id="new-group-button" class="mdc-ripple-surface" v-ripple>
@@ -11,20 +11,26 @@
 				</div>
 			</router-link>
 		</div>
+		<content-placeholder v-if="!groupsMounted"></content-placeholder>
 	</div>
 </template>
 <script>
 	import GroupItem from './groups/GroupItem.vue'
+	import ContentPlaceholder from './groups/ContentPlaceholder.vue'
 	import {ripple} from '../../directives.js'
 	
 	export default {
 		name: 'Groups',
 		components: {
-			GroupItem
+			GroupItem,
+			ContentPlaceholder
 		},
 		computed: {
 			groups() {
 				return this.$store.state.groups
+			},
+			groupsMounted() {
+				return this.$store.state.groupsMounted
 			}
 		},
 		mounted() {
@@ -51,6 +57,7 @@
 		opacity: 1;
 		position: relative;
 		text-decoration: none;
+		height: 105px;
 	}
 	
 	#new-group-button {

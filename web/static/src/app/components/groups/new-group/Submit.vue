@@ -56,8 +56,10 @@
 		align-items: flex-end;
 		justify-content: flex-end;
 		padding: 20px 0;
-		position: absolute;
+		position: sticky;
 		bottom: 0;
 		width: 100%;
+		background: var(--background);
+		transition: var(--dark-theme-background-transition);
 	}
 </style>
