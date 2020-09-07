@@ -1,16 +1,22 @@
 <template>
 	<div id="main-content">
-		<div id="list-container">
-			<ul ref="list" id="item-list" v-if="sessions.length > 0">
-				<next-up-item-indicator></next-up-item-indicator>
-				<item v-for="(session, index) in sessions" :index="index" :key="index"/>
-			</ul>
-			<item-content-placeholder v-else></item-content-placeholder>
+		<actions></actions>
+		<edit-group></edit-group>
+		<div v-if="status <= 1" id="inner">
+			<div id="list-container">
+				<ul ref="list" id="item-list" v-if="status === 1">
+					<next-up-item-indicator></next-up-item-indicator>
+					<item v-for="session in sessions" :id="session.id" :key="session.id"/>
+				</ul>
+				<item-content-placeholder v-else></item-content-placeholder>
+			</div>
+			<div id="content">
+				<next-up></next-up>
+				<div id="lastSession">{{ lastSession }}</div>
+			</div>
 		</div>
-		<div id="content">
-			<next-up></next-up>
-			<div id="lastSession">{{ lastSession }}</div>
-		</div>
+		<div v-else-if="status === 2" id="no-sessions">There no sessions in this group</div>
+		<no-group-selected v-else></no-group-selected>
 	</div>
 </template>
 <script>
@@ -18,6 +24,9 @@
 	import NextUp from '../components/home/NextUp.vue'
 	import NextUpItemIndicator from '../components/home/item-list/NextUpItemIndicator.vue'
 	import ItemContentPlaceholder from '../components/home/item-list/ItemContentPlaceholder.vue'
+	import NoGroupSelected from './home/NoGroupSelected.vue'
+	import Actions from './home/Actions.vue'
+	import EditGroup from './home/EditGroup.vue'
 	
 	export default {
 		name: 'Home',
@@ -25,14 +34,17 @@
 			Item,
 			NextUp,
 			NextUpItemIndicator,
-			ItemContentPlaceholder
+			ItemContentPlaceholder,
+			NoGroupSelected,
+			Actions,
+			EditGroup
 		},
 		computed: {
 			sessions() {
-				return this.$store.state.sessions
+				return this.$store.state.home.sessions
 			},
 			lastSessionDate() {
-				return this.$store.state.lastSessionDate
+				return this.$store.state.home.lastSessionDate
 			},
 			lastSession() {
 				if (this.lastSessionDate) {
@@ -43,10 +55,13 @@
 				}
 			},
 			nextUp() {
-				return this.$store.getters.nextUp
+				return this.$store.getters['home/nextUp']
 			},
-			visitedArr() {
-				return this.$store.state.visitedArr
+			sessionsLoaded() {
+				return this.$store.state.home.sessionsLoaded
+			},
+			status() {
+				return this.$store.getters['home/status']
 			}
 		},
 		methods: {
@@ -100,17 +115,35 @@
 		},
 		watch: {
 			nextUp() {
-				let that = this
-				this.$nextTick(() => {
-					let nextItemElTop = document.getElementsByClassName('next-up-item')[0].offsetTop - 300
-					that.scrollTo(that.$refs.list, nextItemElTop, 500)
-				})
+				if (this.$store.state.home.sessions && this.$store.state.home.sessions.length > 0) {
+					let that = this
+					this.$nextTick(() => {
+						let nextItemElTop = document.getElementsByClassName('next-up-item')[0].offsetTop - 300
+						that.scrollTo(that.$refs.list, nextItemElTop, 500)
+					})
+				}
 			}
 		},
 		mounted() {
-			this.$store.dispatch('initHome')
+			this.$store.dispatch('home/init')
+			this.$store.dispatch('home/setLastSessionDate')
 		}
 	}
 </script>
 <style scoped>
+	#inner {
+		display: flex;
+		flex: 1;
+		overflow: hidden;
+		position: relative;
+	}
+	
+	#no-sessions {
+		display: flex;
+		flex: 1;
+		margin-top: 100px;
+		justify-content: center;
+		font-size: 20px;
+		transition: var(--dark-theme-text-transition);
+	}
 </style>

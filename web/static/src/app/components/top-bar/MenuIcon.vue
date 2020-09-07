@@ -9,7 +9,7 @@
 		name: 'MenuIcon',
 		computed: {
 			darkTheme() {
-				return this.$store.state.darkTheme
+				return this.$store.state.config.darkTheme
 			}
 		}
 	}

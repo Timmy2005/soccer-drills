@@ -6,7 +6,7 @@
 		name: 'NextUpItemIndicator',
 		computed: {
 			nextUp() {
-				return this.$store.getters['nextUp']
+				return this.$store.getters['home/nextUp']
 			}
 		},
 		data() {
@@ -21,7 +21,7 @@
 		},
 		methods: {
 			getNextUp() {
-				if (this.nextUp) {
+				if (this.nextUp && this.nextUp.id) {
 					let that = this
 					this.$nextTick(() => {
 						that.top = document.getElementsByClassName('next-up-item')[0].offsetTop
@@ -43,7 +43,7 @@
 		width: 6px;
 		background: var(--color-dark);
 		will-change: top;
-		transition: top ease 500ms, background ease 250ms;
+		transition: top ease 500ms, var(--dark-theme-background-transition);
 		position: absolute;
 		top: 20px;
 		left: 0;

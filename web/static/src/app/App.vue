@@ -1,5 +1,5 @@
 <template>
-	<div id="app" :class="{ 'dark-theme': darkTheme, 'not-loaded': !loaded }">
+	<div id="app" :class="[{ 'dark-theme': darkTheme, 'not-loaded': !loaded},  darkTheme ? 'theme--dark' : 'theme--light']" class="theme" v-mounted>
 		<div id="menu-overlay" @click="closeMenu" :class="{ 'menu-overlay-open': menuOpen }"></div>
 		<menu-el></menu-el>
 		<top-bar></top-bar>
@@ -10,6 +10,7 @@
 	import TopBar from './components/top-bar/TopBar.vue'
 	import Menu from './components/menu/Menu.vue'
 	
+	import '../../css/themes.scss'
 	import '../../css/themes.css'
 	
 	export default {
@@ -25,7 +26,7 @@
 		},
 		computed: {
 			darkTheme() {
-				const darkTheme = this.$store.state.darkTheme
+				const darkTheme = this.$store.state.config.darkTheme
 				document.body.style.background = darkTheme ? '#292929' : 'white'
 				return darkTheme
 			},
@@ -39,12 +40,17 @@
 			}
 		},
 		mounted() {
-			this.loaded = true
-			this.$nextTick(() => {
-				document.getElementById('p-container').remove()
-			})
-			this.$store.dispatch('setVisitedArr')
-			this.$store.dispatch('setLastSessionDate')
+			this.$store.dispatch('config/getUserSettings')
+		},
+		directives: {
+			mounted: {
+				inserted(el, binding, vnode) {
+					vnode.context.loaded = true
+					vnode.context.$nextTick(() => {
+						document.getElementById('p-container').remove()
+					})
+				}
+			}
 		}
 	}
 </script>
@@ -64,7 +70,7 @@
 	}
 	
 	#app.not-loaded {
-		display: none;
+		/*display: none;*/
 	}
 	
 	#main-content {
@@ -96,17 +102,16 @@
 		z-index: 5;
 		bottom: -10px;
 		pointer-events: none;
-		transition: opacity 250ms ease;
+		transition: opacity var(--dark-theme-transition);
 	}
 	
 	#list-container::after {
-		background-image: linear-gradient(transparent, white);
+		background-image: linear-gradient(transparent, var(--background-light));
 		
 	}
 	
 	#list-container::before {
-		background-image: linear-gradient(transparent, #292929);
-		
+		background-image: linear-gradient(transparent, var(--background-dark));
 	}
 	
 	#app.dark-theme #list-container::after {
@@ -116,6 +121,8 @@
 	#app:not(.dark-theme) #list-container::before {
 		opacity: 0;
 	}
+	
+	
 	
 	#list-container {
 		max-height: 100%;
@@ -152,7 +159,7 @@
 	
 	#lastSession {
 		margin-top: 20px;
-		transition: color 250ms ease;
+		transition: var(--dark-theme-text-transition);
 	}
 	
 	#menu-overlay {
@@ -187,7 +194,7 @@
 	
 	.content-placeholder {
 		background: var(--content-placeholder);
-		transition: background 250ms ease;
+		transition: var(--dark-theme-background-transition);
 	}
 	
 	.router-link-active {

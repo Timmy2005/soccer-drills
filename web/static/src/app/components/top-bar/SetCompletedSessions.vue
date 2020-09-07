@@ -13,26 +13,27 @@
 		computed: {
 			inputIndex: {
 				get() {
-					return this.$store.state.inputIndex
+					return this.$store.state.home.inputIndex
 				},
 				set(value) {
-					this.$store.dispatch('setInputIndexInputValue', value)
+					this.$store.dispatch('home/setInputIndexInputValue', value)
 				}
 			}
 		},
 		methods: {
 			setCompletedSessions() {
-				if (this.inputIndex >= 0 && this.inputIndex <= 29) {
+				let sessionsLength = this.$store.state.home.sessions.length
+				if (this.inputIndex >= 0 && this.inputIndex <= (sessionsLength - 1)) {
 					let array = []
 					for (let i = 0; i < this.inputIndex; i++) {
 						array.push(i + 1)
 					}
 					localStorage.setItem('visitedLinks', JSON.stringify(array))
-					this.$store.dispatch('setVisitedArr')
+					this.$store.dispatch('home/setVisitedArr')
 				}
-				if (parseInt(this.inputIndex) === 30) {
+				if (parseInt(this.inputIndex) === sessionsLength) {
 					localStorage.setItem('visitedLinks', JSON.stringify([]))
-					this.$store.dispatch('setVisitedArr')
+					this.$store.dispatch('home/setVisitedArr')
 				}
 			}
 		}
@@ -76,10 +77,6 @@
 	
 	#set-completed-sessions:hover ~ #set-completed-sessions-shadow {
 		opacity: .35;
-	}
-	
-	#set-completed-sessions-container {
-		margin-right: 20px;
 	}
 	
 	::-webkit-input-placeholder { /* Edge */

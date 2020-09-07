@@ -2,7 +2,7 @@
 	<div id="main-container">
 		<div id="inner-next-up-container">
 			<div class="title">Next up</div>
-			<a v-if="href && sessionNum" id="next-up" :href="href.link" target="_blank" @click="addLink">
+			<a v-if="href && sessionNum" id="next-up" :href="href" target="_blank" @click="addSession">
 				<div>
 					Session {{ sessionNum }}
 				</div>
@@ -17,36 +17,19 @@
 		name: 'NextUp',
 		computed: {
 			href() {
-				return this.$store.getters.nextUp.href
+				return this.$store.getters['home/nextUp'].link
 			},
 			sessionNum() {
-				return this.$store.getters.nextUp.sessionNum
+				return this.$store.getters['home/nextUp'].index + 1
+			},
+			id() {
+				return this.$store.getters['home/nextUp'].id
 			}
 		},
 		methods: {
-			addLink() {
-				if (this.sessionNum < 30) {
-					const items = localStorage.getItem('visitedLinks')
-					if (items) {
-						let obj = JSON.parse(items)
-						obj.push(this.sessionNum)
-						localStorage.setItem('visitedLinks', JSON.stringify(obj))
-					} else {
-						localStorage.setItem('visitedLinks', JSON.stringify([this.sessionNum]))
-					}
-					this.updateVisitedArr()
-				} else if (parseInt(this.sessionNum) === 30) {
-					localStorage.setItem('visitedLinks', JSON.stringify([]))
-					this.updateVisitedArr()
-				}
+			addSession() {
+				this.$store.dispatch('home/sessionCompleted', this.id)
 			},
-			updateVisitedArr() {
-				let timeout = window.setTimeout(() => {
-					this.$store.dispatch('setVisitedArr')
-					this.$store.dispatch('setLastSessionDate')
-					window.clearTimeout(timeout)
-				}, 100)
-			}
 		}
 	}
 </script>
@@ -63,7 +46,7 @@
 	.title {
 		font-size: 60px;
 		width: auto;
-		transition: color 250ms ease;
+		transition: var(--dark-theme-text-transition);
 	}
 	
 	#next-up {

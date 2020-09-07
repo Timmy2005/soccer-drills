@@ -27,14 +27,14 @@
 		},
 		computed: {
 			groups() {
-				return this.$store.state.groups
+				return this.$store.state.groups.groups
 			},
 			groupsMounted() {
-				return this.$store.state.groupsMounted
+				return this.$store.state.groups.groupsMounted
 			}
 		},
 		mounted() {
-			this.$store.dispatch('initGroups')
+			this.$store.dispatch('groups/init')
 		},
 		directives: {
 			ripple

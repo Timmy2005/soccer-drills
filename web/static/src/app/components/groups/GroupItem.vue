@@ -6,7 +6,7 @@
 			</div>
 			<div class="group-info">
 			<span id="group-length-text" class="light-text">
-				{{ groupItem.amountOfSessions }} sessions
+				{{ groupItem.amountOfSessions }} {{ sessionText }}
 			</span>
 				<div id="group-info-separator"></div>
 				<span class="light-text">
@@ -22,11 +22,14 @@
 		props: ['index'],
 		computed: {
 			groupItem() {
-				return this.$store.state.groups[this.index]
+				return this.$store.state.groups.groups[this.index]
+			},
+			sessionText() {
+				return this.groupItem.amountOfSessions === 1 ? 'session' : 'sessions'
 			}
 		},
 		mounted() {
-			this.$store.dispatch('setGroupsMounted')
+			this.$store.dispatch('groups/setGroupsMounted')
 		}
 	}
 </script>

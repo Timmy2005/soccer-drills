@@ -1,4 +1,4 @@
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
 	entry: {
@@ -11,19 +11,36 @@ module.exports = {
 				test: /\.js$/,
 				exclude: /node_modules/,
 				use: {
-					loader: "babel-loader"
-				},
+					loader: 'babel-loader'
+				}
 			},
 			{
 				test: /\.vue$/,
-				loader: 'vue-loader',
+				loader: 'vue-loader'
 			},
 			{
 				test: /\.css$/,
 				use: [
 					'vue-style-loader',
 					'style-loader',
+					'css-loader'
+				]
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					'vue-style-loader',
 					'css-loader',
+					'sass-loader',
+					{
+						loader: 'sass-loader',
+						options: {
+							data: `@import "web/static/css/themes.scss";
+								   @import "web/static/css/_mixins.scss";`
+
+						}
+					}
+				
 				]
 			},
 			{
@@ -32,21 +49,21 @@ module.exports = {
 					{
 						loader: 'file-loader',
 						options: {
-							esModule: false,
-						},
-					},
-				],
+							esModule: false
+						}
+					}
+				]
 			},
 			{
 				test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
 				use: [
-					'file-loader',
-				],
-			},
+					'file-loader'
+				]
+			}
 		]
 	},
 	plugins: [
-		new VueLoaderPlugin(),
+		new VueLoaderPlugin()
 	],
 	watch: true
-};
+}

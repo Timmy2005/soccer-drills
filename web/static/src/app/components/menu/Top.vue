@@ -1,9 +1,13 @@
 <template>
 	<div id="menu-top">
-		<button id="back-icon" class="mdc-icon-button material-icons" @click="closeMenu" v-icon-button>arrow_back</button>
+		<div>
+			<button id="back-icon" class="mdc-icon-button material-icons" @click="closeMenu" v-icon-button>arrow_back
+			</button>
+		</div>
 		<div class="logo-container-wrapper">
 			<div class="logo-container"></div>
 		</div>
+		<div id="menu-spacer"></div>
 	</div>
 </template>
 <script>
@@ -27,7 +31,11 @@
 		padding: 20px;
 		display: flex;
 		align-items: center;
-		/*border-bottom: 1px solid var(--border-color)*/
+	}
+	
+	#menu-top > * {
+		display: flex;
+		flex: 1;
 	}
 	
 	#back-icon {
@@ -47,8 +55,10 @@
 	
 	.logo-container-wrapper {
 		display: flex;
-		flex: 1;
 		justify-content: center;
-		margin-right: 45px;
+	}
+	
+	#menu-spacer {
+		padding: 2px;
 	}
 </style>

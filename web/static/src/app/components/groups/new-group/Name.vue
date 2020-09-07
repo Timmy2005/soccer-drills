@@ -16,10 +16,10 @@
 		computed: {
 			name: {
 				get() {
-					return this.$store.state.newGroup.name
+					return this.$store.state.groups.newGroup.name
 				},
 				set(value) {
-					this.$store.dispatch('newGroup/setName', value, {root: true})
+					this.$store.dispatch('groups/newGroup/setName', value, {root: true})
 				}
 			}
 		},

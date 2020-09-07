@@ -68,6 +68,34 @@ class Command(BaseCommand):
         group.user = user
         group.save()
 
+        session = Session()
+        session.user = user
+        session.group = group
+        session.link = 'http://www.google.com'
+        session.index = 0
+        session.save()
+
+        session = Session()
+        session.user = user
+        session.group = group
+        session.link = 'http://www.google.com'
+        session.index = 1
+        session.save()
+
+        session = Session()
+        session.user = user
+        session.group = group
+        session.link = 'http://www.google.com'
+        session.index = 2
+        session.save()
+
+        session = Session()
+        session.user = user
+        session.group = group
+        session.link = 'http://www.google.com'
+        session.index = 3
+        session.save()
+
         group = Group()
         group.name = 'Test 2'
         group.user = user

@@ -8,25 +8,24 @@
 		</div>
 		<div class="header-section">
 			<set-completed-sessions></set-completed-sessions>
-			<div class="clear-next-up" @click="clearNextUp">Clear</div>
-			<dark-theme-toggle></dark-theme-toggle>
+			<user-icon></user-icon>
 		</div>
 	</div>
 </template>
 <script>
-	import SetCompletedSessions from './SetCompletedSessions.vue'
-	import DarkThemeToggle from './DarkThemeToggle.vue'
-	import MenuIcon from './MenuIcon.vue'
+	import { iconButton } from '../../../directives.js'
 	import Logo from './Logo.vue'
-	import {iconButton} from '../../../directives.js'
+	import MenuIcon from './MenuIcon.vue'
+	import SetCompletedSessions from './SetCompletedSessions.vue'
+	import UserIcon from './UserIcon.vue'
 	
 	export default {
 		name: 'TopBar',
 		components: {
 			SetCompletedSessions,
-			DarkThemeToggle,
 			MenuIcon,
-			Logo
+			Logo,
+			UserIcon
 			
 		},
 		data() {
@@ -34,12 +33,6 @@
 		},
 		computed: {},
 		methods: {
-			clearNextUp() {
-				localStorage.setItem('visitedLinks', JSON.stringify([]))
-				localStorage.removeItem('lastSession')
-				this.$store.dispatch('setVisitedArr')
-				this.$store.dispatch('setLastSessionDate')
-			},
 			openMenu() {
 				this.$store.dispatch('openMenu')
 			}
@@ -53,10 +46,10 @@
 	#top-app-bar {
 		display: flex;
 		align-items: center;
-		/*border-bottom: var(--border-color) 1px solid;*/
 		background: var(--header-background);
 		transition: var(--dark-theme-background-transition);
-		padding: 20px;
+		padding: 0 20px;
+		height: 76px;
 		justify-content: space-between;
 		box-shadow: 0 -5px 10px 5px rgba(0, 0, 0, 0.2);
 	}
@@ -66,7 +59,7 @@
 		display: flex;
 		align-items: center;
 		cursor: pointer;
-		transition: color 250ms ease;
+		transition: color var(--dark-theme-transition);
 	}
 	
 	.header-section {
@@ -80,7 +73,7 @@
 		height: 36px;
 		padding: 2px;
 		position: relative;
-		transition: color 250ms ease;
+		transition: var(--dark-theme-text-transition);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -90,5 +83,10 @@
 		--mdc-ripple-top: 6px;
 		--mdc-ripple-left: 6px;
 		--mdc-ripple-fg-size: 24px
+	}
+</style>
+<style lang="scss">
+	.header-content-placeholder {
+		background: theme-var(--header-content-placeholder);
 	}
 </style>

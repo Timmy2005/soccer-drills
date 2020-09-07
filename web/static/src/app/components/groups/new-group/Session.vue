@@ -1,11 +1,11 @@
 <template>
-	<div class="new-session-container">
+	<li class="new-session-container">
 		<div class="inner">
 			<name :id="id"></name>
 			<link-el :id="id"></link-el>
 		</div>
 		<i class="material-icons remove-session" @click="remove">close</i>
-	</div>
+	</li>
 </template>
 <script>
 	import Link from './session/Link.vue'
@@ -20,7 +20,7 @@
 		},
 		methods: {
 			remove() {
-				this.$store.dispatch('newGroup/removeSession', this.id)
+				this.$store.dispatch('groups/newGroup/removeSession', this.id)
 			}
 		}
 		
@@ -31,11 +31,13 @@
 		display: flex;
 		margin-top: 10px;
 		align-items: flex-end;
+		will-change: max-height, opacity;
 	}
 	
 	.remove-session {
 		user-select: none;
 		cursor: pointer;
+		transition: var(--dark-theme-text-transition);
 		
 	}
 	

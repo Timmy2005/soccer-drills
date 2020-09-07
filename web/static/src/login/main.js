@@ -4,6 +4,8 @@ import store from './store'
 import router from './routes.js'
 import axios from 'axios'
 
+console.log(store)
+
 import '../../css/icons.css'
 import '../../css/material.css'
 import '../../css/common-login.css'
@@ -20,6 +22,7 @@ let darkTheme = localStorage.getItem('darkTheme') === 'true'
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios
+
 
 store.dispatch('toggleDarkTheme', darkTheme).then(() => {
     new Vue({

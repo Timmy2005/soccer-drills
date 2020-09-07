@@ -7,7 +7,7 @@
 			<!--				<circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>-->
 			<!--			</svg>-->
 		</button>
-		<button id="submit-button" class="mdc-button mdc-button--unelevated" type="submit" v-button>
+		<button id="submit-button" class="mdc-button mdc-button--unelevated" type="submit" @click="create" v-button>
 			<div class="mdc-button__ripple"></div>
 			<span class="mdc-button__label">Create group</span>
 			<!--			<svg v-else class="spinner" viewBox="0 0 50 50">-->
@@ -26,8 +26,13 @@
 		},
 		methods: {
 			reset() {
-				this.$store.dispatch('newGroup/reset')
+				this.$store.dispatch('groups/newGroup/reset')
 				this.$router.push('/groups/')
+			},
+			create() {
+				this.$store.dispatch('groups/newGroup/createNewGroup').then(() => {
+					this.$router.push(this.$store.state.groups.newGroup.next)
+				})
 			}
 		}
 	}
@@ -40,7 +45,7 @@
 		letter-spacing: 0.02rem;
 		padding: 4px 30px;
 		border-radius: 3px;
-		transition: background-color 250ms ease;
+		transition: var(--dark-theme-background-transition);
 		will-change: background-color;
 		min-height: 28px;
 		min-width: 102px;

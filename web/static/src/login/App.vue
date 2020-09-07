@@ -12,7 +12,7 @@
 	</div>
 </template>
 <script>
-	import '../../css/themes.css'
+	import '../../css/themes.scss'
 	
 	export default {
 		name: 'App',

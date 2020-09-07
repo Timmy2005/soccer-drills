@@ -1,6 +1,6 @@
 <template>
 	<div class="groups" ref="container" v-container>
-		<div class="group-item-outer" v-for="placeholder in placeholders" v-e>
+		<div class="group-item-outer" v-for="placeholder in placeholders">
 			<div class="group-item"></div>
 		</div>
 	</div>
@@ -24,11 +24,6 @@
 					vnode.context.height = el.offsetHeight
 				}
 			},
-			e: {
-				inserted() {
-					console.log('hi')
-				}
-			}
 		}
 	}
 </script>

@@ -21,7 +21,7 @@ Vue.use(VueRouter)
 
 Vue.prototype.$http = axios
 
-store.dispatch('toggleDarkTheme', darkTheme).then(() => {
+store.dispatch('config/toggleDarkTheme', darkTheme).then(() => {
     new Vue({
         router,
         store,

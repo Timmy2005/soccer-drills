@@ -1,0 +1,143 @@
+//$dark-theme-background-transition: 250ms background ease;
+//$dark-theme-border-transition: 250ms border ease;
+//$dark-theme-text-transition: 250ms color ease;
+//$background-light: #f8f8f8;
+//$background-dark: #292929;
+
+//#app {
+//
+//
+//    &:not(.dark-theme) {
+//        $background: $background-light;
+//        $border-color: #e0e0e0;
+//        $text-color: #2c3e50;
+//        $color-light: #42a7b9;
+//        $color-dark: #2f6b8c;
+//        $dark-grey: #949494;
+//        $text-field-label-color: rgba(0, 0, 0, 0.6);
+//        $text-field-color: rgba(0, 0, 0, 0.87);
+//        $logo: url('../src/assets/logo_light.svg');
+//        $content-placeholder: #f2f2f2;
+//        $ripple-color: black;
+//        $header-background: white;
+//        $card-background: white;
+//        $card-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
+//        $success: #00c851;
+//        $mdc-theme-primary: $color-dark;
+//}
+//    &.dark-theme {
+//        $background: $background-dark;
+//        $border-color: #555555;
+//        $text-color: #eeeeee;
+//        $color-light: #82c0cb;
+//        $color-dark: #447591;
+//        $dark-grey: #b7b7b7;
+//        $text-field-label-color: rgba(255, 255, 255, 0.6);
+//        $text-field-color: rgba(255, 255, 255, 0.87);
+//        $mdc-theme-error: #cf6679;
+//        $logo: url('../src/assets/logo_dark.svg');
+//        $content-placeholder: #333333;
+//        $ripple-color: white;
+//        $header-background: #333333;
+//        $card-background: #2e2e2e;
+//        $card-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+//        $success: #00c851;
+//        $mdc-theme-primary: $color-dark;
+//    }
+//
+//    &:not(.dark-theme) .mdc-icon-button {
+//        &::before, &::after {
+//            background-color: #000
+//        }
+//    }
+//
+//    &.dark-theme .mdc-icon-button {
+//        &::before, &::after {
+//            background-color: white
+//        }
+//    }
+//$themes: (
+//        light-theme: (
+//                background: $background-light,
+//                border-color: #e0e0e0,
+//                text-color: #2c3e50,
+//                color-light: #42a7b9,
+//                color-dark: #2f6b8c,
+//                dark-grey: #949494,
+//                text-field-label-color: rgba(0, 0, 0, 0.6),
+//                text-field-color: rgba(0, 0, 0, 0.87),
+//                logo: url('../src/assets/logo_light.svg'),
+//                content-placeholder: #f2f2f2,
+//                ripple-color: black,
+//                header-background: white,
+//                card-background: white,
+//                card-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2),
+//                success: #00c851,
+//                mdc-theme-primary: color-dark,
+//        ),
+//        dark-theme: (
+//                background: $background-dark,
+//                border-color: #555555,
+//                text-color: #eeeeee,
+//                color-light: #82c0cb,
+//                color-dark: #447591,
+//                dark-grey: #b7b7b7,
+//                text-field-label-color: rgba(255, 255, 255, 0.6),
+//                text-field-color: rgba(255, 255, 255, 0.87),
+//                mdc-theme-error: #cf6679,
+//                logo: url('../src/assets/logo_dark.svg'),
+//                content-placeholder: #333333,
+//                ripple-color: white,
+//                header-background: #333333,
+//                card-background: #2e2e2e,
+//                card-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3),
+//                success: #00c851,
+//                mdc-theme-primary: color-dark,
+//        ),
+//);
+//
+//@mixin themed() {
+//    @each $theme, $map in $themes {
+//        .theme--#{$theme} & {
+//            $theme-map: () !global;
+//            @each $key, $submap in $map {
+//                $value: map-get(map-get($themes, $theme), '#{$key}');
+//                $theme-map: map-merge($theme-map, ($key: $value)) !global;
+//            }
+//            @content;
+//            $theme-map: null !global;
+//        }
+//    }
+//}
+//
+//@function t($key) {
+//    @return map-get($theme-map, $key);
+//}
+
+@import 'mixins';
+@import 'variables';
+
+#app {
+	@include spread-map($main);
+
+	&:not(.dark-theme) {
+		@include spread-map($light-theme);
+
+		.mdc-icon-button::before,
+		.mdc-icon-button::after {
+			background-color: #000;
+
+		}
+	}
+	&.dark-theme {
+		@include spread-map($dark-theme);
+
+		.mdc-icon-button::before,
+		.mdc-icon-button::after {
+			background-color: #fff;
+
+		}
+	}
+
+	--mdc-theme-primary: var(--color-dark);
+}

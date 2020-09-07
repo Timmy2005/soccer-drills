@@ -1,7 +1,7 @@
 # shellcheck disable=SC2164
-cd ~/soccerdrills
+cd ~/session
 source virtualenvwrapper.sh
-workon soccerdrills
+workon session
 
 dropdb soccerdrills
 createdb --owner=timothy soccerdrills

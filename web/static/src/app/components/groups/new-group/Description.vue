@@ -2,7 +2,7 @@
 	<label class="mdc-text-field mdc-text-field--filled mdc-text-field--textarea" v-text-field>
 		<span class="mdc-floating-label" id="my-label-id">Description</span>
 		<span class="mdc-text-field__resizer">
-    		<textarea class="mdc-text-field__input" rows="2" cols="40" aria-label="Label"></textarea>
+    		<textarea class="mdc-text-field__input" rows="2" cols="40" aria-label="Label" v-model="description"></textarea>
   		</span>
 		<span class="mdc-line-ripple"></span>
 	</label>
@@ -15,10 +15,10 @@
 		computed: {
 			description: {
 				get() {
-					return this.$store.state.description
+					return this.$store.state.groups.newGroup.description
 				},
 				set(value) {
-					this.$store.dispatch('newGroup/setDescription', value)
+					this.$store.dispatch('groups/newGroup/setDescription', value)
 				}
 			}
 		},

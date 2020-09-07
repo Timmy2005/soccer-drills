@@ -7,7 +7,7 @@
 				<span class="mdc-list-item__text">Home</span>
 			</li>
 		</router-link>
-		<router-link to="groups">
+		<router-link to="/groups">
 			<li class="mdc-list-item" v-ripple>
 				<span class="mdc-list-item__ripple"></span>
 				<i id="group-icon" class="material-icons menu-item-icon">collections_bookmark</i>

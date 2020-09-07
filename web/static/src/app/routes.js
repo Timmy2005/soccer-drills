@@ -1,7 +1,9 @@
 import VueRouter from 'vue-router'
-import Home from './components/Home.vue'
-import Groups from './components/Groups.vue'
-import NewGroup from './components/groups/NewGroup.vue'
+const Home = () => import('./components/Home.vue')
+const Groups = () => import('./components/Groups.vue')
+const NewGroup = () => import('./components/groups/NewGroup.vue')
+const EditGroup = () => import('./components/groups/EditGroup.vue')
+const NotFound = () => import('./components/NotFound.vue')
 
 export default new VueRouter({
 	mode: 'history',
@@ -16,5 +18,11 @@ export default new VueRouter({
 		{
 			path: '/groups/new', component: NewGroup
 		},
+		{
+			path: '/groups/edit/:id', component: EditGroup, props: true
+		},
+		{
+			path: '*', component: NotFound
+		}
 	]
 })

@@ -1,12 +1,14 @@
-from django.shortcuts import render
 from json import loads, dumps
+
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from app.models import UserSettings
 
 
@@ -38,6 +40,11 @@ def login_user(request):
     })
 
     return HttpResponse(response)
+
+
+def logout_user(request):
+    logout(request)
+    return JsonResponse({'location': '/login/'})
 
 
 def register_user(request):

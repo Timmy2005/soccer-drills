@@ -1,6 +1,7 @@
 <template>
 	<li ref="el" class="item">
-		<a @click="addLink" :href="session" target="_blank" :class="{ 'next-up-item': isNextUp, 'visited': visited && !isNextUp }">
+		<a @click="addSession" :href="session.link" target="_blank"
+		   :class="{ 'next-up-item': isNextUp, 'visited': visited && !isNextUp }">
 			Session {{ sessionNum }}
 		</a>
 	</li>
@@ -8,45 +9,25 @@
 <script>
 	export default {
 		name: 'Item',
-		props: ['index'],
+		props: ['id'],
 		computed: {
 			session() {
-				return this.$store.state.sessions[this.index]
+				return this.$store.state.home.sessions.find(x => x.id === this.id)
 			},
 			sessionNum() {
-				return this.index + 1
+				return this.session.index + 1
 			},
 			visited() {
-				const visited = this.$store.state.visitedArr
-				return visited ? visited.includes(this.sessionNum) : false
+				const visited = this.$store.state.home.groupProgress
+				return visited.some(x => x.id === this.id)
 			},
 			isNextUp() {
-				return this.$store.getters.nextUp.sessionNum === this.sessionNum
+				return this.$store.getters['home/nextUp'].id === this.id
 			}
 		},
 		methods: {
-			addLink() {
-				if (this.sessionNum < 30) {
-					const items = localStorage.getItem('visitedLinks')
-					if (items) {
-						let obj = JSON.parse(items)
-						obj.push(this.sessionNum)
-						localStorage.setItem('visitedLinks', JSON.stringify(obj))
-					} else {
-						localStorage.setItem('visitedLinks', JSON.stringify([this.sessionNum]))
-					}
-					this.updateVisitedArr()
-				} else if (parseInt(this.sessionNum) === 30) {
-					localStorage.setItem('visitedLinks', JSON.stringify([]))
-					this.updateVisitedArr()
-				}
-			},
-			updateVisitedArr() {
-				let timeout = window.setTimeout(() => {
-					this.$store.dispatch('setVisitedArr')
-					this.$store.dispatch('setLastSessionDate')
-					window.clearTimeout(timeout)
-				}, 100)
+			addSession() {
+				this.$store.dispatch('home/sessionCompleted', this.id)
 			}
 		}
 	}

@@ -19,9 +19,14 @@
 
 			#p-top-bar {
 				display: flex;
-				height: 36px;
-				padding: 20px;
+				height: 76px;
+				padding: 0 20px;
 				box-shadow: 0 -5px 10px 5px rgba(0, 0, 0, 0.2);
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			#p-top-bar > div {
 				display: flex;
 				align-items: center;
 			}
@@ -48,6 +53,13 @@
 				height: 100%;
 			}
 
+			#p-user-icon {
+				width: 35px;
+				height: 35px;
+				margin-left: 20px;
+				border-radius: 50%;
+				cursor: pointer;
+			}
 		</style>
 		{% if dark_theme %}
 			<style>
@@ -58,15 +70,23 @@
 				#p-top-bar {
 					background: #333333;
 				}
+
+				#p-user-icon {
+					background: #3d3d3d;
+				}
 			</style>
 		{% else %}
 			<style>
 				body {
-					background: white;
+					background: #f2f2f2;
 				}
 
 				#p-top-bar {
-					background: #f2f2f2;
+					background: white;
+				}
+
+				#p-user-icon {
+					background: #ebebeb;
 				}
 			</style>
 		{% endif %}
@@ -74,94 +94,99 @@
 	<body>
 		<div id="p-container">
 			<div id="p-top-bar">
-				<div id="p-menu">
-					{% if dark_theme %}
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px"
-							 height="24px">
-							<path d="M0 0h24v24H0z" fill="none"></path>
-							<path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
-						</svg>
-					{% else %}
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px"
-							 height="24px">
-							<path d="M0 0h24v24H0z" fill="none"></path>
-							<path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
-						</svg>
-					{% endif %}
+				<div>
+					<div id="p-menu">
+						{% if dark_theme %}
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px"
+								 height="24px">
+								<path d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+							</svg>
+						{% else %}
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px"
+								 height="24px">
+								<path d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+							</svg>
+						{% endif %}
+					</div>
+					<div id="p-logo">
+						{% if dark_theme %}
+							<svg id="p-logo-svg" xmlns="http://www.w3.org/2000/svg"
+								 viewBox="0 0 1850.4 593.28">
+								<defs>
+									<style>.cls-1 {
+										fill: none;
+									}
+
+									.cls-2 {
+										fill: url(#linear-gradient);
+									}
+
+									.cls-3 {
+										font-size: 469px;
+										fill: #ccc;
+										font-family: AvenirNext-Regular, Avenir Next, serif;
+										letter-spacing: -0.03em;
+									}</style>
+									<linearGradient id="linear-gradient" x1="-62.89" y1="276.46" x2="410.89" y2="276.46"
+													gradientUnits="userSpaceOnUse">
+										<stop offset="0" stop-color="#82c0cb"></stop>
+										<stop offset="0.21" stop-color="#7ab7c4"></stop>
+										<stop offset="0.56" stop-color="#659db0"></stop>
+										<stop offset="0.99" stop-color="#447591"></stop>
+									</linearGradient>
+								</defs>
+								<g id="Layer_2" data-name="Layer 2">
+									<g id="Layer_1-2" data-name="Layer 1">
+										<rect class="cls-1" x="128.5" y="230.46" width="92" height="92"></rect>
+										<path class="cls-2"
+											  d="M104.5,451a24,24,0,0,0,24-24v-56.5h92V427a24,24,0,1,0,48,0v-56.5H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5v-92H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5V126a24,24,0,1,0-48,0v56.5h-92V126a24,24,0,1,0-48,0v56.5H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5v92H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5V427A24,24,0,0,0,104.5,451Zm24-220.5h92v92h-92Z"></path>
+										<text class="cls-3" transform="translate(389.5 400.52)">session</text>
+									</g>
+								</g>
+							</svg>
+						{% else %}
+							<svg id="p-logo-svg" xmlns="http://www.w3.org/2000/svg"
+								 viewBox="0 0 1850.4 593.28">
+								<defs>
+									<style>.cls-1 {
+										fill: none;
+									}
+
+									.cls-2 {
+										fill: url(#linear-gradient);
+									}
+
+									.cls-3 {
+										font-size: 469px;
+										fill: #666;
+										font-family: AvenirNext-Regular, Avenir Next, serif;
+										letter-spacing: -0.03em;
+									}</style>
+									<linearGradient id="linear-gradient" x1="-334.26" y1="794.05" x2="49.83" y2="794.05"
+													gradientTransform="matrix(0.96, -0.27, 0.27, 0.96, 95.52, -526.22)"
+													gradientUnits="userSpaceOnUse">
+										<stop offset="0" stop-color="#42a7b9"></stop>
+										<stop offset="0.25" stop-color="#3f9eb2"></stop>
+										<stop offset="0.66" stop-color="#37849f"></stop>
+										<stop offset="0.99" stop-color="#2f6b8c"></stop>
+									</linearGradient>
+								</defs>
+								<g id="Layer_2" data-name="Layer 2">
+									<g id="Layer_1-2" data-name="Layer 1">
+										<rect class="cls-1" x="128.5" y="230.46" width="92" height="92"></rect>
+										<path class="cls-2"
+											  d="M104.5,451a24,24,0,0,0,24-24v-56.5h92V427a24,24,0,1,0,48,0v-56.5H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5v-92H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5V126a24,24,0,1,0-48,0v56.5h-92V126a24,24,0,1,0-48,0v56.5H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5v92H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5V427A24,24,0,0,0,104.5,451Zm24-220.5h92v92h-92Z"></path>
+										<text class="cls-3" transform="translate(389.5 400.52)">session</text>
+									</g>
+								</g>
+							</svg>
+						{% endif %}
+					</div>
 				</div>
-				<div id="p-logo">
-					{% if dark_theme %}
-						<svg id="p-logo-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-							 viewBox="0 0 1850.4 593.28">
-							<defs>
-								<style>.cls-1 {
-									fill: none;
-								}
-
-								.cls-2 {
-									fill: url(#linear-gradient);
-								}
-
-								.cls-3 {
-									font-size: 469px;
-									fill: #ccc;
-									font-family: AvenirNext-Regular, Avenir Next, serif;
-									letter-spacing: -0.03em;
-								}</style>
-								<linearGradient id="linear-gradient" x1="-62.89" y1="276.46" x2="410.89" y2="276.46"
-												gradientUnits="userSpaceOnUse">
-									<stop offset="0" stop-color="#82c0cb"></stop>
-									<stop offset="0.21" stop-color="#7ab7c4"></stop>
-									<stop offset="0.56" stop-color="#659db0"></stop>
-									<stop offset="0.99" stop-color="#447591"></stop>
-								</linearGradient>
-							</defs>
-							<g id="Layer_2" data-name="Layer 2">
-								<g id="Layer_1-2" data-name="Layer 1">
-									<rect class="cls-1" x="128.5" y="230.46" width="92" height="92"></rect>
-									<path class="cls-2"
-										  d="M104.5,451a24,24,0,0,0,24-24v-56.5h92V427a24,24,0,1,0,48,0v-56.5H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5v-92H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5V126a24,24,0,1,0-48,0v56.5h-92V126a24,24,0,1,0-48,0v56.5H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5v92H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5V427A24,24,0,0,0,104.5,451Zm24-220.5h92v92h-92Z"></path>
-									<text class="cls-3" transform="translate(389.5 400.52)">session</text>
-								</g>
-							</g>
-						</svg>
-					{% else %}
-						<svg id="p-logo-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-							 viewBox="0 0 1850.4 593.28">
-							<defs>
-								<style>.cls-1 {
-									fill: none;
-								}
-
-								.cls-2 {
-									fill: url(#linear-gradient);
-								}
-
-								.cls-3 {
-									font-size: 469px;
-									fill: #666;
-									font-family: AvenirNext-Regular, Avenir Next, serif;
-									letter-spacing: -0.03em;
-								}</style>
-								<linearGradient id="linear-gradient" x1="-334.26" y1="794.05" x2="49.83" y2="794.05"
-												gradientTransform="matrix(0.96, -0.27, 0.27, 0.96, 95.52, -526.22)"
-												gradientUnits="userSpaceOnUse">
-									<stop offset="0" stop-color="#42a7b9"></stop>
-									<stop offset="0.25" stop-color="#3f9eb2"></stop>
-									<stop offset="0.66" stop-color="#37849f"></stop>
-									<stop offset="0.99" stop-color="#2f6b8c"></stop>
-								</linearGradient>
-							</defs>
-							<g id="Layer_2" data-name="Layer 2">
-								<g id="Layer_1-2" data-name="Layer 1">
-									<rect class="cls-1" x="128.5" y="230.46" width="92" height="92"></rect>
-									<path class="cls-2"
-										  d="M104.5,451a24,24,0,0,0,24-24v-56.5h92V427a24,24,0,1,0,48,0v-56.5H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5v-92H325a24,24,0,0,0,24-24h0a24,24,0,0,0-24-24H268.5V126a24,24,0,1,0-48,0v56.5h-92V126a24,24,0,1,0-48,0v56.5H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5v92H24a24,24,0,0,0-24,24H0a24,24,0,0,0,24,24H80.5V427A24,24,0,0,0,104.5,451Zm24-220.5h92v92h-92Z"></path>
-									<text class="cls-3" transform="translate(389.5 400.52)">session</text>
-								</g>
-							</g>
-						</svg>
-					{% endif %}
+				<div>
+					<div id="p-user-icon"></div>
 				</div>
 			</div>
 		</div>

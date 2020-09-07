@@ -75,7 +75,6 @@
 					'username': this.username,
 					'password': this.password,
 				}).then(function (response) {
-						console.log(response)
 						if (response.data.login === 'valid') {
 							window.location = response.data.url
 						} else {

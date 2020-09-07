@@ -15,10 +15,10 @@
 		computed: {
 			name: {
 				get() {
-					return this.$store.state.newGroup.sessions.find(x => x.id === this.id).name
+					return this.$store.state.groups.newGroup.sessions.find(x => x.id === this.id).name
 				},
 				set(value) {
-					this.$store.dispatch('newGroup/setSessionName', {id: this.id, value: value})
+					this.$store.dispatch('groups/newGroup/setSessionName', {id: this.id, value: value})
 				}
 			}
 		},

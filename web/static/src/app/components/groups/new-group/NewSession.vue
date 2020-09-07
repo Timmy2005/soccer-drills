@@ -2,7 +2,7 @@
 	<div class="new-session-container">
 		Add
 		<label id="new-session-count" class="mdc-text-field mdc-text-field--filled text-field--inner" v-text-field>
-			<input id="new-session-count-input" class="mdc-text-field__input" v-model="newSessionCount" type="number" maxlength="2">
+			<input id="new-session-count-input" class="mdc-text-field__input" @keyup.enter="addRow" v-model="newSessionCount" type="number" maxlength="2">
 			<span class="mdc-line-ripple" ref="ripple"></span>
 		</label>
 		{{rowText}}
@@ -29,7 +29,7 @@
 		},
 		methods: {
 			addRow() {
-				this.$store.dispatch('newGroup/newSession', this.newSessionCount)
+				this.$store.dispatch('groups/newGroup/newSession', this.newSessionCount)
 			}
 		},
 		directives: {
@@ -44,6 +44,7 @@
 		align-items: center;
 		margin: 20px 0;
 		justify-content: flex-end;
+		transition: var(--dark-theme-text-transition);
 	}
 	
 	#new-session-count {
@@ -56,6 +57,7 @@
 		display: flex;
 		text-align: center;
 		/*margin-right: 2px;*/
+		transition: var(--dark-theme-text-transition);
 	}
 	
 	#submit-button {
@@ -80,5 +82,9 @@
 	
 	.mdc-text-field--filled:not(.mdc-text-field--textarea) {
 		height: 24px;
+	}
+	
+	.mdc-line-ripple {
+		transition: var(--dark-theme-border-transition);
 	}
 </style>
